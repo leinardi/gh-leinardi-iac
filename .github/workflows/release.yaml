@@ -1,0 +1,16 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      semver:
+        description: "Release Semantic Version (e.g. 1.15.2 or v1.15.2)"
+        required: true
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    uses: leinardi/gh-reusable-workflows/.github/workflows/simple-tag-and-release.yaml@v1
+    with:
+      semver: ${{ inputs.semver }}
