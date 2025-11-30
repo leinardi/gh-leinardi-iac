@@ -1,0 +1,137 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-added-large-files
+  - repo: https://github.com/tofuutils/pre-commit-opentofu
+    rev: v2.2.2
+    hooks:
+      - id: tofu_docs
+        args:
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exist=true
+        exclude: "^stacks/base-gcp"
+      - id: tofu_fmt
+      - id: tofu_tflint
+      - id: tofu_tflint
+        alias: tofu_tflint-json-output
+        name: tofu_tflint (json output)
+        args: ["--args=--format=json", "--args=--fix"]
+        stages: [manual]
+      - id: tofu_validate
+      - id: tofu_validate
+        alias: tofu_validate-json-output
+        name: tofu_validate (json output)
+        args: ["--args=-json", "--args=-no-color"]
+        stages: [manual]
+      - id: tofu_trivy
+      - id: tofu_trivy
+        alias: tofu_trivy-sarif-output
+        name: tofu_trivy (sarif output)
+        args: ["--args=--format sarif"]
+        stages: [manual]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          # add stubs the project needs
+          - types-requests
+          - types-setuptools
+        exclude: ^bin/
+      - id: mypy
+        alias: mypy-json-output
+        name: mypy (json output)
+        args:
+          [
+            "--output",
+            "json",
+            "--hide-error-context",
+            "--show-column-numbers",
+            "--show-absolute-path",
+            "--no-pretty",
+            "--ignore-missing-imports",
+            "--scripts-are-modules",
+          ]
+        additional_dependencies:
+          # add stubs the project needs
+          - types-requests
+          - types-setuptools
+        exclude: ^bin/
+        stages: [manual]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.7
+    hooks:
+      - id: ruff-check
+        args: ["--fix"]
+        exclude: ^bin/
+      - id: ruff-format
+        exclude: ^bin/
+      - id: ruff-check
+        alias: ruff-check-rdjson
+        args: ["--fix", "-q", "--output-format=rdjson"]
+        exclude: ^bin/
+        stages: [manual]
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.9
+    hooks:
+      - id: actionlint
+        name: actionlint
+        files: ^\.github/workflows/.*\.(yml|yaml)$
+        args: ["-shellcheck", "shellcheck -S error"]
+      - id: actionlint
+        alias: actionlint-oneline
+        name: actionlint (one line per one error)
+        files: ^\.github/workflows/.*\.(yml|yaml)$
+        args: ["-oneline", "-shellcheck", "shellcheck -S error"]
+        stages: [manual]
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.19.1
+    hooks:
+      - id: markdownlint-cli2
+  - repo: local
+    hooks:
+      - id: shellcheck
+        name: shellcheck
+        entry: shellcheck
+        language: system
+        types: [shell]
+        args: ["-x"]
+      - id: shellcheck
+        alias: shellcheck-diff-output
+        name: shellcheck (diff output)
+        entry: shellcheck
+        language: system
+        types: [shell]
+        args: ["-f", "diff", "-x"]
+        stages: [manual]
+      - id: shellcheck
+        alias: shellcheck-json-output
+        name: shellcheck (json output)
+        entry: shellcheck
+        language: system
+        types: [shell]
+        args: ["-f", "json", "-x"]
+        stages: [manual]
+      - id: prettier-yaml
+        name: prettier-yaml
+        entry: prettier
+        language: node
+        additional_dependencies: ["prettier@3.5.3"]
+        files: \.(yml|yaml)$
+        args: ["--write"]
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+      - id: yamllint
+        alias: yamllint-parsable
+        name: "yamllint (parsable output)"
+        args: ["--format", "parsable"]
+        stages: [manual]
