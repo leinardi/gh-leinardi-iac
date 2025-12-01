@@ -1,0 +1,54 @@
+locals {
+  # 1) Global default: enable immutable tags for all managed repos
+  immutable_tags_default_enabled = true
+
+  # 2) Per-repo overrides:
+  #    - true  -> force-enable immutable tags even if default was false
+  #    - false -> disable immutable tags even if default was true
+  #    - omit  -> fall back to immutable_tags_default_enabled
+  immutable_tags_overrides = {
+    # "some-repo"        = false
+    # "another-special"  = true
+  }
+
+  # 3) Final decision per repo: should we apply the Immutable tags ruleset?
+  immutable_tag_repos_enabled = {
+    for name, _ in local.resolved_repos :
+    name => coalesce(
+      lookup(local.immutable_tags_overrides, name, null),
+      local.immutable_tags_default_enabled
+    )
+  }
+}
+
+resource "github_repository_ruleset" "immutable_tags" {
+  # Create a ruleset only for repos where the final flag is true
+  for_each = {
+    for name, enabled in local.immutable_tag_repos_enabled :
+    name => name
+    if enabled
+  }
+
+  name        = "Immutable tags"
+  repository  = each.key
+  target      = "tag"
+  enforcement = "active"
+
+  conditions {
+    ref_name {
+      include = ["~ALL"]
+      exclude = [
+        "refs/tags/v[0-9]",      # v0..v9 remain mutable
+        "refs/tags/v[1-9][0-9]", # v10..v99 remain mutable
+        "refs/tags/latest",      # latest remains mutable
+      ]
+    }
+  }
+
+  # Immutable tags: disallow delete, non-FF, and update
+  rules {
+    deletion         = true
+    non_fast_forward = true
+    update           = true
+  }
+}

@@ -11,15 +11,24 @@
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_github"></a> [github](#provider\_github) | 6.8.3 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_repo_labels"></a> [repo\_labels](#module\_repo\_labels) | ../../modules/github-labels | n/a |
+| <a name="module_repositories"></a> [repositories](#module\_repositories) | ../../modules/github-repositories | n/a |
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [github_repository.default_template](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository) | resource |
+| [github_repository_ruleset.default_branch_protection](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_ruleset) | resource |
+| [github_repository_ruleset.immutable_tags](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_ruleset) | resource |
 
 ## Inputs
 

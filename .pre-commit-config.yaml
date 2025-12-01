@@ -16,9 +16,9 @@ repos:
         args:
           - --hook-config=--add-to-existing-file=true
           - --hook-config=--create-file-if-not-exist=true
-        exclude: "^stacks/base-gcp"
       - id: tofu_fmt
       - id: tofu_tflint
+        args: ["--args=--fix"]
       - id: tofu_tflint
         alias: tofu_tflint-json-output
         name: tofu_tflint (json output)
@@ -44,7 +44,6 @@ repos:
           # add stubs the project needs
           - types-requests
           - types-setuptools
-        exclude: ^bin/
       - id: mypy
         alias: mypy-json-output
         name: mypy (json output)
@@ -63,20 +62,16 @@ repos:
           # add stubs the project needs
           - types-requests
           - types-setuptools
-        exclude: ^bin/
         stages: [manual]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.7
     hooks:
       - id: ruff-check
         args: ["--fix"]
-        exclude: ^bin/
       - id: ruff-format
-        exclude: ^bin/
       - id: ruff-check
         alias: ruff-check-rdjson
         args: ["--fix", "-q", "--output-format=rdjson"]
-        exclude: ^bin/
         stages: [manual]
   - repo: https://github.com/rhysd/actionlint
     rev: v1.7.9
