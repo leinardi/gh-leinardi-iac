@@ -15,10 +15,9 @@ locals {
     has_projects           = false
     has_wiki               = false
     license_template       = "mit"
-    template_mode          = "default" #   "default", "none", "custom"
+    template_mode          = "default" # "default", "none", "custom"
     visibility             = "public"
     vulnerability_alerts   = true
-
   }
 
   ########################################
@@ -32,15 +31,44 @@ locals {
       topics      = ["makefile", "automation", "tooling"]
     }
 
-    # New repos go here
-    # "another-repo" = {
-    #   description   = "..."
-    #   template_mode = "none"
-    # }
+    "gh-reusable-workflows" = {
+      description   = "Reusable GitHub Actions workflows for my projects."
+      topics        = ["github-actions", "reusable-workflows", "ci"]
+      template_mode = "none" # existing repo, do NOT create from template
+    }
+
+    "JDInstaller-macOS" = {
+      description   = "An Ansible playbook to automate the setup of macOS personalizations."
+      topics        = ["ansible", "macos", "automation"]
+      template_mode = "none" # existing repo, do NOT create from template
+    }
+
+    "swarm-scheduler-exporter" = {
+      description   = "Prometheus exporter for Docker Swarm focused on task state visibility, accurate desired replicas, and operability at scale."
+      topics        = ["prometheus", "docker-swarm", "exporter", "monitoring"]
+      template_mode = "none" # existing repo, do NOT create from template
+    }
+
+    "kotlin-awtrix-light" = {
+      template_mode = "none" # existing repo, do NOT create from template
+    }
+
+    "homelab" = {
+      visibility    = "private"
+      template_mode = "none" # existing repo, do NOT create from template
+    }
+
+    "gha-pre-commit-actionlint-reviewdog" = {
+      description   = "GitHub Action template for actionlint pre-commit + reviewdog."
+      topics        = ["github-actions", "pre-commit", "actionlint", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    # New repos go here...
   }
 
   ########################################
-  # 3. Default template config (from the resource)
+  # 3. Template config
   ########################################
   default_template = {
     owner                = var.github_owner
@@ -48,20 +76,16 @@ locals {
     include_all_branches = false
   }
 
-  ########################################
-  # 4. Custom templates per repo (optional / future)
-  ########################################
   repo_template_overrides = {
-    # Example:
-    # "special-repo" = {
-    #   owner                = var.github_owner
-    #   repository           = "another-template-repo"
-    #   include_all_branches = false
-    # }
+    "gha-pre-commit-actionlint-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
   }
 
   ########################################
-  # 5. Final resolved_repos for the module
+  # 4. Final resolved_repos
   ########################################
   resolved_repos = {
     for name, cfg in local.repos_base :

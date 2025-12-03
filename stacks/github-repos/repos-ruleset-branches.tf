@@ -7,7 +7,7 @@ locals {
   #   - false -> force disable
   #   - omit  -> use default above
   default_branch_protection_overrides = {
-    # "some-playground-repo" = false
+    "homelab" = false
   }
 
   # Final per-repo flag: should we apply the default-branch ruleset?
@@ -44,6 +44,9 @@ resource "github_repository_ruleset" "default_branch_protection" {
     name => name
     if enabled
   }
+
+  # Ensure all repositories exist before we start creating rulesets
+  depends_on = [module.repositories]
 
   name        = "Protect default branch"
   repository  = each.key

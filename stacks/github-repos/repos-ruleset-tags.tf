@@ -7,8 +7,7 @@ locals {
   #    - false -> disable immutable tags even if default was true
   #    - omit  -> fall back to immutable_tags_default_enabled
   immutable_tags_overrides = {
-    # "some-repo"        = false
-    # "another-special"  = true
+    "homelab" = false
   }
 
   # 3) Final decision per repo: should we apply the Immutable tags ruleset?
@@ -28,6 +27,9 @@ resource "github_repository_ruleset" "immutable_tags" {
     name => name
     if enabled
   }
+
+  # Ensure all repositories exist before we start creating rulesets
+  depends_on = [module.repositories]
 
   name        = "Immutable tags"
   repository  = each.key

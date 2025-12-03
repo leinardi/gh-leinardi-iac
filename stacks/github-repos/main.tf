@@ -11,4 +11,7 @@ module "repo_labels" {
   repository    = each.key
   labels        = each.value
   authoritative = true
+
+  # ensure repos exist first
+  depends_on = [module.repositories]
 }
