@@ -1,6 +1,6 @@
 locals {
   ########################################
-  # 1. Global defaults for all repos
+  # Global defaults for all repos
   ########################################
   repo_defaults = {
     allow_auto_merge       = true
@@ -21,10 +21,11 @@ locals {
   }
 
   ########################################
-  # 2. Logical repo definitions
+  # Logical repo definitions
   ########################################
   #   - No template logic here; just describe the repos.
   #   - You can add `template_mode` per repo where needed.
+  #   - You can import existing repos with tofu import   'module.repositories.github_repository.this["<repo name>"]'   <repo name>
   repos_base = {
     "make-common" = {
       description = "Shared Makefile snippets and reusable tasks."
@@ -58,6 +59,12 @@ locals {
       template_mode = "none" # existing repo, do NOT create from template
     }
 
+    "gh-leinardi-iac" = {
+      visibility    = "private"
+      topics        = ["opentofu", "automation"]
+      template_mode = "none" # existing repo, do NOT create from template
+    }
+
     "gha-pre-commit-actionlint-reviewdog" = {
       description   = "GitHub Action template for actionlint pre-commit + reviewdog."
       topics        = ["github-actions", "pre-commit", "actionlint", "reviewdog"]
@@ -68,7 +75,7 @@ locals {
   }
 
   ########################################
-  # 3. Template config
+  # Template config
   ########################################
   default_template = {
     owner                = var.github_owner
@@ -85,7 +92,39 @@ locals {
   }
 
   ########################################
-  # 4. Final resolved_repos
+  # Default branch protection overrides
+  ########################################
+
+  # Global default: enable default-branch protection for all managed repos
+  default_branch_protection_default_enabled = true
+
+  # Per-repo overrides:
+  #   - true  -> force enable
+  #   - false -> force disable
+  #   - omit  -> use default local.immutable_tags_default_enabled
+  default_branch_protection_overrides = {
+    "gh-leinardi-iac" = false
+    "homelab"         = false
+  }
+
+  ########################################
+  # Immutable tags overrides
+  ########################################
+
+  # Global default: enable immutable tags for all managed repos
+  immutable_tags_default_enabled = true
+
+  # Per-repo overrides:
+  #    - true  -> force-enable immutable tags even if default was false
+  #    - false -> disable immutable tags even if default was true
+  #    - omit  -> fall back to immutable_tags_default_enabled
+  immutable_tags_overrides = {
+    "gh-leinardi-iac" = false
+    "homelab"         = false
+  }
+
+  ########################################
+  # Final resolved_repos
   ########################################
   resolved_repos = {
     for name, cfg in local.repos_base :

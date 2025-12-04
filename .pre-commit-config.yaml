@@ -36,6 +36,10 @@ repos:
         name: tofu_trivy (sarif output)
         args: ["--args=--format sarif"]
         stages: [manual]
+  - repo: https://github.com/checkmake/checkmake.git
+    rev: 0.2.2
+    hooks:
+      - id: checkmake
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.19.0
     hooks:

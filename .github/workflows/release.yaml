@@ -9,6 +9,8 @@ on:
 
 jobs:
   release:
+    permissions:
+      contents: write
     uses: leinardi/gh-reusable-workflows/.github/workflows/simple-tag-and-release.yaml@v1
     with:
       semver: ${{ inputs.semver }}

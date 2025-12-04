@@ -1,16 +1,5 @@
 locals {
-  # 1) Global default: enable immutable tags for all managed repos
-  immutable_tags_default_enabled = true
-
-  # 2) Per-repo overrides:
-  #    - true  -> force-enable immutable tags even if default was false
-  #    - false -> disable immutable tags even if default was true
-  #    - omit  -> fall back to immutable_tags_default_enabled
-  immutable_tags_overrides = {
-    "homelab" = false
-  }
-
-  # 3) Final decision per repo: should we apply the Immutable tags ruleset?
+  # Final decision per repo: should we apply the Immutable tags ruleset?
   immutable_tag_repos_enabled = {
     for name, _ in local.resolved_repos :
     name => coalesce(

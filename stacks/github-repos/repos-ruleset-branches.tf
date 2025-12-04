@@ -1,15 +1,4 @@
 locals {
-  # Global default: enable default-branch protection for all managed repos
-  default_branch_protection_default_enabled = true
-
-  # Per-repo overrides:
-  #   - true  -> force enable
-  #   - false -> force disable
-  #   - omit  -> use default above
-  default_branch_protection_overrides = {
-    "homelab" = false
-  }
-
   # Final per-repo flag: should we apply the default-branch ruleset?
   default_branch_protection_enabled = {
     for name, _ in local.resolved_repos :
@@ -52,6 +41,15 @@ resource "github_repository_ruleset" "default_branch_protection" {
   repository  = each.key
   target      = "branch"
   enforcement = "active"
+
+  # === Bypass list ===
+  # Allow the repo Admin role to bypass this ruleset,
+  # but *only* via pull requests (no direct pushes).
+  bypass_actors {
+    actor_id    = 5 # Admin
+    actor_type  = "RepositoryRole"
+    bypass_mode = "pull_request"
+  }
 
   conditions {
     ref_name {
