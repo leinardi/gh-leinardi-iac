@@ -6,7 +6,7 @@ locals {
     allow_auto_merge       = true
     allow_merge_commit     = true
     allow_rebase_merge     = false
-    allow_squash_merge     = true
+    allow_squash_merge     = false
     allow_update_branch    = true
     archive_on_destroy     = true
     auto_init              = true
@@ -66,8 +66,92 @@ locals {
     }
 
     "gha-pre-commit-actionlint-reviewdog" = {
-      description   = "GitHub Action template for actionlint pre-commit + reviewdog."
+      description   = "GitHub Action to run actionlint via pre-commit and comment results on PRs using reviewdog."
       topics        = ["github-actions", "pre-commit", "actionlint", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-ansible-lint-reviewdog" = {
+      description   = "GitHub Action to run ansible-lint via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "ansible-lint", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-hooks-reviewdog" = {
+      description   = "GitHub Action to run pre-commit hooks and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "hooks", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-markdownlint-cli2-reviewdog" = {
+      description   = "GitHub Action to run markdownlint-cli2 via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "markdownlint-cli2", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-mypy-reviewdog" = {
+      description   = "GitHub Action to run mypy via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "mypy", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-prettier-reviewdog" = {
+      description   = "GitHub Action to run prettier via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "prettier", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-rain-format-reviewdog" = {
+      description   = "GitHub Action to run rain-format via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "rain-format", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-ruff-reviewdog" = {
+      description   = "GitHub Action to run ruff via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "ruff", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-shellcheck-reviewdog" = {
+      description   = "GitHub Action to run shellcheck via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "shellcheck", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-sqlfluff-reviewdog" = {
+      description   = "GitHub Action to run sqlfluff via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "sqlfluff", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-tofu-docs-reviewdog" = {
+      description   = "GitHub Action to run tofu-docs via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "tofu-docs", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-tofu-fmt-reviewdog" = {
+      description   = "GitHub Action to run tofu-fmt via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "tofu-fmt", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-tofu-tflint-reviewdog" = {
+      description   = "GitHub Action to run tofu-tflint via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "tofu-tflint", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-tofu-trivy-reviewdog" = {
+      description   = "GitHub Action to run tofu-trivy via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "tofu-trivy", "reviewdog"]
+      template_mode = "custom" # use repo_template_overrides
+    }
+
+    "gha-pre-commit-yamllint-reviewdog" = {
+      description   = "GitHub Action to run yamllint via pre-commit and comment results on PRs using reviewdog."
+      topics        = ["github-actions", "pre-commit", "yamllint", "reviewdog"]
       template_mode = "custom" # use repo_template_overrides
     }
 
@@ -85,6 +169,96 @@ locals {
 
   repo_template_overrides = {
     "gha-pre-commit-actionlint-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-ansible-lint-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-hooks-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-markdownlint-cli2-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-mypy-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-prettier-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-rain-format-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-ruff-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-shellcheck-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-sqlfluff-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-tofu-docs-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-tofu-fmt-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-tofu-tflint-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-tofu-trivy-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-tofu-validate-reviewdog" = {
+      owner                = var.github_owner
+      repository           = github_repository.pre_commit_reviewdog_template.name
+      include_all_branches = false
+    }
+
+    "gha-pre-commit-yamllint-reviewdog" = {
       owner                = var.github_owner
       repository           = github_repository.pre_commit_reviewdog_template.name
       include_all_branches = false

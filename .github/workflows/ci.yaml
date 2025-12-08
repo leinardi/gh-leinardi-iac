@@ -9,31 +9,178 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pre-commit:
-    name: Run pre-commit
+  actionlint:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/checkout@v4
         with:
-          python-version: "3.x"
+          fetch-depth: 0
 
-      - name: Cache pre-commit
-        uses: actions/cache@v4
+      - name: Run actionlint via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-actionlint-reviewdog@v1
         with:
-          path: ~/.cache/pre-commit
-          key: pre-commit|${{ runner.os }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install pre-commit
-        run: pip install --no-cache-dir pre-commit
+  pre-commit-hooks:
+    runs-on: ubuntu-latest
 
-      - name: Run pre-commit on all files
-        run: pre-commit run --all-files --show-diff-on-failure
-        # If pre-commit returns non-zero, this step (and job) will fail automatically
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run core pre-commit hooks + reviewdog diff
+        uses: leinardi/gha-pre-commit-core-hooks-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  markdownlint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run markdownlint-cli2 via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-markdownlint-cli2-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  mypy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run mypy via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-mypy-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  ruff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run ruff via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-ruff-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  shellcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run shellcheck via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-shellcheck-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  tofu-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run OpenTofu docs via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-tofu-docs-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  tofu-fmt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run OpenTofu fmt via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-tofu-fmt-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  tofu-tflint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run OpenTofu tflint (JSON) via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-tofu-tflint-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  tofu-trivy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Trivy (SARIF) for OpenTofu via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-tofu-trivy-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  yamllint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run yamllint via pre-commit + reviewdog
+        uses: leinardi/gha-pre-commit-yamllint-reviewdog@v1
+        with:
+          from-ref: ${{ github.event.pull_request.base.sha }}
+          to-ref: ${{ github.event.pull_request.head.sha }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
