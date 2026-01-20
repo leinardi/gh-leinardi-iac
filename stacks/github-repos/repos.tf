@@ -68,7 +68,7 @@ locals {
     }
 
     "gh-leinardi-iac" = {
-      visibility    = "private"
+      description   = "OpenTofu-managed GitHub repositories, templates, and rulesets for the leinardi account"
       topics        = ["opentofu", "automation"]
       template_mode = "none" # existing repo, do NOT create from template
     }
