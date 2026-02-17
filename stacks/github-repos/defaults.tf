@@ -20,29 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-variable "repository" {
-  description = "GitHub repository name (without owner), e.g. \"gh-leinardi-iac\""
-  type        = string
-}
-
-variable "labels" {
-  description = "Map of label name -> { color, description }"
-  type = map(object({
-    # 6-char hex; can be with or without leading '#'
-    color       = string
-    description = optional(string)
-  }))
-}
-
-variable "authoritative" {
-  description = <<EOT
-Whether to manage labels in an authoritative way.
-
-- true: authoritative sync using github_issue_labels, labels not defined here
-        will be deleted from the repository.
-- false: non-destructive, only creates/updates labels defined here,
-                   leaves other labels on the repo untouched (github_issue_label).
-
-EOT
-  type        = bool
+locals {
+  repo_defaults = {
+    allow_merge_commit     = true
+    allow_rebase_merge     = false
+    allow_squash_merge     = false
+    allow_update_branch    = true
+    archive_on_destroy     = true
+    auto_init              = true
+    delete_branch_on_merge = true
+    has_issues             = true
+    has_projects           = false
+    has_wiki               = false
+    license_template       = "mit"
+    visibility             = "public"
+    vulnerability_alerts   = true
+  }
 }
