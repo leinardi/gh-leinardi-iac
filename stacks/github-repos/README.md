@@ -13,14 +13,36 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_github"></a> [github](#provider\_github) | 6.10.2 |
+| <a name="provider_github"></a> [github](#provider\_github) | 6.11.1 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_repo_labels"></a> [repo\_labels](#module\_repo\_labels) | ../../modules/github-labels | n/a |
-| <a name="module_repositories"></a> [repositories](#module\_repositories) | ../../modules/github-repositories | n/a |
+| <a name="module_repo_dotfiles"></a> [repo\_dotfiles](#module\_repo\_dotfiles) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gh_leinardi_iac"></a> [repo\_gh\_leinardi\_iac](#module\_repo\_gh\_leinardi\_iac) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gh_reusable_workflows"></a> [repo\_gh\_reusable\_workflows](#module\_repo\_gh\_reusable\_workflows) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_actionlint_reviewdog"></a> [repo\_gha\_pre\_commit\_actionlint\_reviewdog](#module\_repo\_gha\_pre\_commit\_actionlint\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_ansible_lint_reviewdog"></a> [repo\_gha\_pre\_commit\_ansible\_lint\_reviewdog](#module\_repo\_gha\_pre\_commit\_ansible\_lint\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_hooks_reviewdog"></a> [repo\_gha\_pre\_commit\_hooks\_reviewdog](#module\_repo\_gha\_pre\_commit\_hooks\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_markdownlint_cli2_reviewdog"></a> [repo\_gha\_pre\_commit\_markdownlint\_cli2\_reviewdog](#module\_repo\_gha\_pre\_commit\_markdownlint\_cli2\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_mypy_reviewdog"></a> [repo\_gha\_pre\_commit\_mypy\_reviewdog](#module\_repo\_gha\_pre\_commit\_mypy\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_prettier_reviewdog"></a> [repo\_gha\_pre\_commit\_prettier\_reviewdog](#module\_repo\_gha\_pre\_commit\_prettier\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_rain_format_reviewdog"></a> [repo\_gha\_pre\_commit\_rain\_format\_reviewdog](#module\_repo\_gha\_pre\_commit\_rain\_format\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_ruff_reviewdog"></a> [repo\_gha\_pre\_commit\_ruff\_reviewdog](#module\_repo\_gha\_pre\_commit\_ruff\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_shellcheck_reviewdog"></a> [repo\_gha\_pre\_commit\_shellcheck\_reviewdog](#module\_repo\_gha\_pre\_commit\_shellcheck\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_sqlfluff_reviewdog"></a> [repo\_gha\_pre\_commit\_sqlfluff\_reviewdog](#module\_repo\_gha\_pre\_commit\_sqlfluff\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_tofu_docs_reviewdog"></a> [repo\_gha\_pre\_commit\_tofu\_docs\_reviewdog](#module\_repo\_gha\_pre\_commit\_tofu\_docs\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_tofu_fmt_reviewdog"></a> [repo\_gha\_pre\_commit\_tofu\_fmt\_reviewdog](#module\_repo\_gha\_pre\_commit\_tofu\_fmt\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_tofu_tflint_reviewdog"></a> [repo\_gha\_pre\_commit\_tofu\_tflint\_reviewdog](#module\_repo\_gha\_pre\_commit\_tofu\_tflint\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_tofu_trivy_reviewdog"></a> [repo\_gha\_pre\_commit\_tofu\_trivy\_reviewdog](#module\_repo\_gha\_pre\_commit\_tofu\_trivy\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_yamllint_reviewdog"></a> [repo\_gha\_pre\_commit\_yamllint\_reviewdog](#module\_repo\_gha\_pre\_commit\_yamllint\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gotilert"></a> [repo\_gotilert](#module\_repo\_gotilert) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_homelab"></a> [repo\_homelab](#module\_repo\_homelab) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_jdinstaller_macos"></a> [repo\_jdinstaller\_macos](#module\_repo\_jdinstaller\_macos) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_kotlin_awtrix_light"></a> [repo\_kotlin\_awtrix\_light](#module\_repo\_kotlin\_awtrix\_light) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_make_common"></a> [repo\_make\_common](#module\_repo\_make\_common) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_swarm_scheduler_exporter"></a> [repo\_swarm\_scheduler\_exporter](#module\_repo\_swarm\_scheduler\_exporter) | ../../modules/github-repo-stack | n/a |
 | <a name="module_template_default_labels_wipe"></a> [template\_default\_labels\_wipe](#module\_template\_default\_labels\_wipe) | ../../modules/github-labels | n/a |
 | <a name="module_template_pre_commit_reviewdog_labels_wipe"></a> [template\_pre\_commit\_reviewdog\_labels\_wipe](#module\_template\_pre\_commit\_reviewdog\_labels\_wipe) | ../../modules/github-labels | n/a |
 
@@ -30,13 +52,12 @@
 |------|------|
 | [github_repository.default_template](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository) | resource |
 | [github_repository.pre_commit_reviewdog_template](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository) | resource |
-| [github_repository_ruleset.default_branch_protection](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_ruleset) | resource |
-| [github_repository_ruleset.immutable_tags](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_ruleset) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_enable_rulesets_on_private"></a> [enable\_rulesets\_on\_private](#input\_enable\_rulesets\_on\_private) | If false, rulesets only apply to public repos. | `bool` | `false` | no |
 | <a name="input_github_owner"></a> [github\_owner](#input\_github\_owner) | GitHub owner (user or org) this stack manages | `string` | `"leinardi"` | no |
 
 ## Outputs

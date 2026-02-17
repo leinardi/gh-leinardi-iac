@@ -1,6 +1,70 @@
-locals {
-  # 1) Global default labels for all repos managed by this stack
-  default_labels = {
+# MIT License
+#
+# Copyright (c) 2026 Roberto Leinardi
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+
+variable "repo_name" {
+  type        = string
+  description = "Repository name"
+}
+
+variable "description" {
+  type    = string
+  default = null
+}
+
+variable "topics" {
+  type        = list(string)
+  default     = []
+  description = "Extra topics. 'gh-leinardi-iac' is always added."
+}
+
+variable "visibility" {
+  type        = string
+  default     = "public"
+  description = "public or private"
+}
+
+# Optional template used only at creation time.
+# If null, repo is created without template (or imported).
+variable "template" {
+  type = object({
+    owner                = string
+    repository           = string
+    include_all_branches = optional(bool)
+  })
+  default = null
+}
+
+variable "labels_authoritative" {
+  type    = bool
+  default = true
+}
+
+variable "default_labels" {
+  type = map(object({
+    color       = string
+    description = optional(string)
+  }))
+  default = {
     # === Type labels ===
     "bug" = {
       description = "Unexpected problem / unintended behavior"
@@ -167,26 +231,103 @@ locals {
       color       = "#0E8A16"
     }
   }
+}
 
-  # 2) Optional per-repo label overrides / additions
-  #    (keys = repo name; usually empty to get pure defaults)
-  repo_label_overrides = {
-    # Example to customize only this repo later:
-    # "gtk-kn" = {
-    #   "language: kotlin" = {
-    #     description = "Kotlin-specific issues"
-    #     color       = "#A97BFF"
-    #   }
-    # }
-  }
+variable "label_overrides" {
+  type = map(object({
+    color       = string
+    description = optional(string)
+  }))
+  default     = {}
+  description = "Per-repo label overrides/additions"
+}
 
-  # 3) Effective labels for each repo: defaults + repo-specific overrides
-  #    local.resolved_repos already exists from your repo module
-  repo_labels = {
-    for repo_name, _ in local.resolved_repos :
-    repo_name => merge(
-      local.default_labels,
-      lookup(local.repo_label_overrides, repo_name, {})
-    )
-  }
+# Repo defaults
+variable "allow_auto_merge" {
+  # Keep parity with your github-repositories module default:
+  # if null, module decides based on visibility (public => true).
+  type    = bool
+  default = null
+}
+
+variable "allow_merge_commit" {
+  type    = bool
+  default = true
+}
+
+variable "allow_rebase_merge" {
+  type    = bool
+  default = false
+}
+
+variable "allow_squash_merge" {
+  type    = bool
+  default = false
+}
+
+variable "allow_update_branch" {
+  type    = bool
+  default = true
+}
+
+variable "archive_on_destroy" {
+  type    = bool
+  default = true
+}
+
+variable "auto_init" {
+  type    = bool
+  default = true
+}
+
+variable "delete_branch_on_merge" {
+  type    = bool
+  default = true
+}
+
+variable "has_issues" {
+  type    = bool
+  default = true
+}
+
+variable "has_projects" {
+  type    = bool
+  default = false
+}
+
+variable "has_wiki" {
+  type    = bool
+  default = false
+}
+
+variable "license_template" {
+  type    = string
+  default = "mit"
+}
+
+variable "vulnerability_alerts" {
+  type    = bool
+  default = true
+}
+
+# Rulesets knobs
+variable "enable_rulesets_on_private" {
+  type        = bool
+  default     = false
+  description = "If false, rulesets only for public repos (GitHub Free limitation)."
+}
+
+variable "default_branch_ruleset_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "immutable_tags_ruleset_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "default_branch_required_checks" {
+  type    = list(string)
+  default = []
 }

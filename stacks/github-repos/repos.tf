@@ -1,334 +1,290 @@
+# MIT License
+#
+# Copyright (c) 2026 Roberto Leinardi
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 locals {
-  ########################################
-  # Global defaults for all repos
-  ########################################
-  repo_defaults = {
-    allow_merge_commit     = true
-    allow_rebase_merge     = false
-    allow_squash_merge     = false
-    allow_update_branch    = true
-    archive_on_destroy     = true
-    auto_init              = true
-    delete_branch_on_merge = true
-    has_issues             = true
-    has_projects           = false
-    has_wiki               = false
-    license_template       = "mit"
-    template_mode          = "default" # "default", "none", "custom"
-    visibility             = "public"
-    vulnerability_alerts   = true
-  }
-
-  ########################################
-  # Logical repo definitions
-  ########################################
-  #   - No template logic here; just describe the repos.
-  #   - You can add `template_mode` per repo where needed.
-  #   - You can import existing repos with tofu import   'module.repositories.github_repository.this["<repo name>"]'   <repo name>
-  repos_base = {
-    "make-common" = {
-      description = "Shared Makefile snippets and reusable tasks."
-      topics      = ["makefile", "automation", "tooling"]
-    }
-
-    "gh-reusable-workflows" = {
-      description   = "Reusable GitHub Actions workflows for my projects."
-      topics        = ["github-actions", "reusable-workflows", "ci"]
-      template_mode = "none" # existing repo, do NOT create from template
-    }
-
-    "gotilert" = {
-      description = "A small Gotify-compatible HTTP shim that forwards messages to Alertmanager."
-      topics      = ["alertmanager", "gotify", "monitoring"]
-    }
-
-    "JDInstaller-macOS" = {
-      description   = "An Ansible playbook to automate the setup of macOS personalizations."
-      topics        = ["ansible", "macos", "automation"]
-      template_mode = "none" # existing repo, do NOT create from template
-    }
-
-    "swarm-scheduler-exporter" = {
-      description   = "Prometheus exporter for Docker Swarm focused on task state visibility, accurate desired replicas, and operability at scale."
-      topics        = ["prometheus", "docker-swarm", "exporter", "monitoring"]
-      template_mode = "none" # existing repo, do NOT create from template
-    }
-
-    "kotlin-awtrix-light" = {
-      template_mode = "none" # existing repo, do NOT create from template
-    }
-
-    "dotfiles" = {
-      visibility = "private"
-    }
-
-    "homelab" = {
-      visibility    = "private"
-      template_mode = "none" # existing repo, do NOT create from template
-    }
-
-    "gh-leinardi-iac" = {
-      description   = "OpenTofu-managed GitHub repositories, templates, and rulesets for the leinardi account"
-      topics        = ["opentofu", "automation"]
-      template_mode = "none" # existing repo, do NOT create from template
-    }
-
-    "gha-pre-commit-actionlint-reviewdog" = {
-      description   = "GitHub Action to run actionlint via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "actionlint", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-ansible-lint-reviewdog" = {
-      description   = "GitHub Action to run ansible-lint via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "ansible-lint", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-hooks-reviewdog" = {
-      description   = "GitHub Action to run pre-commit hooks and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "hooks", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-markdownlint-cli2-reviewdog" = {
-      description   = "GitHub Action to run markdownlint-cli2 via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "markdownlint-cli2", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-mypy-reviewdog" = {
-      description   = "GitHub Action to run mypy via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "mypy", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-prettier-reviewdog" = {
-      description   = "GitHub Action to run prettier via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "prettier", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-rain-format-reviewdog" = {
-      description   = "GitHub Action to run rain-format via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "rain-format", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-ruff-reviewdog" = {
-      description   = "GitHub Action to run ruff via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "ruff", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-shellcheck-reviewdog" = {
-      description   = "GitHub Action to run shellcheck via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "shellcheck", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-sqlfluff-reviewdog" = {
-      description   = "GitHub Action to run sqlfluff via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "sqlfluff", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-tofu-docs-reviewdog" = {
-      description   = "GitHub Action to run tofu-docs via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "tofu-docs", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-tofu-fmt-reviewdog" = {
-      description   = "GitHub Action to run tofu-fmt via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "tofu-fmt", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-tofu-tflint-reviewdog" = {
-      description   = "GitHub Action to run tofu-tflint via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "tofu-tflint", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-tofu-trivy-reviewdog" = {
-      description   = "GitHub Action to run tofu-trivy via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "tofu-trivy", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    "gha-pre-commit-yamllint-reviewdog" = {
-      description   = "GitHub Action to run yamllint via pre-commit and comment results on PRs using reviewdog."
-      topics        = ["github-actions", "pre-commit", "yamllint", "reviewdog"]
-      template_mode = "custom" # use repo_template_overrides
-    }
-
-    # New repos go here...
-  }
-
-  ########################################
-  # Template config
-  ########################################
+  # Template objects used at creation-time
   default_template = {
     owner                = var.github_owner
     repository           = github_repository.default_template.name
     include_all_branches = false
   }
 
-  repo_template_overrides = {
-    "gha-pre-commit-actionlint-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-ansible-lint-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-hooks-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-markdownlint-cli2-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-mypy-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-prettier-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-rain-format-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-ruff-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-shellcheck-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-sqlfluff-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-tofu-docs-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-tofu-fmt-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-tofu-tflint-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-tofu-trivy-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-tofu-validate-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
-
-    "gha-pre-commit-yamllint-reviewdog" = {
-      owner                = var.github_owner
-      repository           = github_repository.pre_commit_reviewdog_template.name
-      include_all_branches = false
-    }
+  reviewdog_template = {
+    owner                = var.github_owner
+    repository           = github_repository.pre_commit_reviewdog_template.name
+    include_all_branches = false
   }
+}
 
-  ########################################
-  # Default branch protection overrides
-  ########################################
+module "repo_make_common" {
+  source = "../../modules/github-repo-stack"
 
-  # Global default: enable default-branch protection for all managed repos
-  default_branch_protection_default_enabled = true
+  repo_name   = "make-common"
+  description = "Shared Makefile snippets and reusable tasks."
+  topics      = ["makefile", "automation", "tooling"]
+  template    = local.default_template
 
-  # Per-repo overrides:
-  #   - true  -> force enable
-  #   - false -> force disable
-  #   - omit  -> use default local.immutable_tags_default_enabled
-  default_branch_protection_overrides = {
-  }
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
 
-  ########################################
-  # Immutable tags overrides
-  ########################################
+module "repo_gotilert" {
+  source = "../../modules/github-repo-stack"
 
-  # Global default: enable immutable tags for all managed repos
-  immutable_tags_default_enabled = true
+  repo_name   = "gotilert"
+  description = "A small Gotify-compatible HTTP shim that forwards messages to Alertmanager."
+  topics      = ["alertmanager", "gotify", "monitoring"]
+  template    = local.default_template
 
-  # Per-repo overrides:
-  #    - true  -> force-enable immutable tags even if default was false
-  #    - false -> disable immutable tags even if default was true
-  #    - omit  -> fall back to immutable_tags_default_enabled
-  immutable_tags_overrides = {
-  }
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
 
-  ########################################
-  # Final resolved_repos
-  ########################################
-  resolved_repos = {
-    for name, cfg in local.repos_base :
-    name => merge(
-      local.repo_defaults,
-      cfg,
-      {
-        name = name
+module "repo_gh_reusable_workflows" {
+  source = "../../modules/github-repo-stack"
 
-        # Always tag repos managed by this stack
-        topics = distinct(concat(try(cfg.topics, []), ["gh-leinardi-iac"]))
+  repo_name   = "gh-reusable-workflows"
+  description = "Reusable GitHub Actions workflows for my projects."
+  topics      = ["github-actions", "reusable-workflows", "ci"]
 
-        template = (
-          lookup(cfg, "template_mode", "default") == "none"
-          ? null
-          : (
-            lookup(cfg, "template_mode", "default") == "default"
-            ? local.default_template
-            : local.repo_template_overrides[name]
-          )
-        )
-      }
-    )
-  }
-  repo_supports_rulesets = {
-    for name, cfg in local.repos_base :
-    name => lookup(cfg, "visibility", local.repo_defaults.visibility) == "public"
-  }
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_jdinstaller_macos" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "JDInstaller-macOS"
+  description = "An Ansible playbook to automate the setup of macOS personalizations."
+  topics      = ["ansible", "macos", "automation"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_swarm_scheduler_exporter" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "swarm-scheduler-exporter"
+  description = "Prometheus exporter for Docker Swarm focused on task state visibility, accurate desired replicas, and operability at scale."
+  topics      = ["prometheus", "docker-swarm", "exporter", "monitoring"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_kotlin_awtrix_light" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name = "kotlin-awtrix-light"
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_dotfiles" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "dotfiles"
+  visibility = "private"
+  template   = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_homelab" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "homelab"
+  visibility = "private"
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gh_leinardi_iac" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gh-leinardi-iac"
+  description = "OpenTofu-managed GitHub repositories, templates, and rulesets for the leinardi account"
+  topics      = ["opentofu", "automation"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_actionlint_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-actionlint-reviewdog"
+  description = "GitHub Action to run actionlint via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "actionlint", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_ansible_lint_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-ansible-lint-reviewdog"
+  description = "GitHub Action to run ansible-lint via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "ansible-lint", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_hooks_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-hooks-reviewdog"
+  description = "GitHub Action to run pre-commit hooks and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "hooks", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_markdownlint_cli2_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-markdownlint-cli2-reviewdog"
+  description = "GitHub Action to run markdownlint-cli2 via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "markdownlint-cli2", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_mypy_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-mypy-reviewdog"
+  description = "GitHub Action to run mypy via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "mypy", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_prettier_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-prettier-reviewdog"
+  description = "GitHub Action to run prettier via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "prettier", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_rain_format_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-rain-format-reviewdog"
+  description = "GitHub Action to run rain-format via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "rain-format", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_ruff_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-ruff-reviewdog"
+  description = "GitHub Action to run ruff via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "ruff", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_shellcheck_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-shellcheck-reviewdog"
+  description = "GitHub Action to run shellcheck via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "shellcheck", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_sqlfluff_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-sqlfluff-reviewdog"
+  description = "GitHub Action to run sqlfluff via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "sqlfluff", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_tofu_docs_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-tofu-docs-reviewdog"
+  description = "GitHub Action to run tofu-docs via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "tofu-docs", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_tofu_fmt_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-tofu-fmt-reviewdog"
+  description = "GitHub Action to run tofu-fmt via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "tofu-fmt", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_tofu_tflint_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-tofu-tflint-reviewdog"
+  description = "GitHub Action to run tofu-tflint via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "tofu-tflint", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_tofu_trivy_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-tofu-trivy-reviewdog"
+  description = "GitHub Action to run tofu-trivy via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "tofu-trivy", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gha_pre_commit_yamllint_reviewdog" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-yamllint-reviewdog"
+  description = "GitHub Action to run yamllint via pre-commit and comment results on PRs using reviewdog."
+  topics      = ["github-actions", "pre-commit", "yamllint", "reviewdog"]
+  template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
 }
