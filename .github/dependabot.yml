@@ -1,39 +1,25 @@
 version: 2
-enable-beta-ecosystems: true # Required to use the Pre-Commit ecosystems
+enable-beta-ecosystems: true # Required for the pre-commit ecosystem
+
+multi-ecosystem-groups:
+  ci-deps:
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "ci"
+
 updates:
-  # Keep GitHub Actions used in this repo up to date
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
-      - "ci"
-    open-pull-requests-limit: 5
+    patterns:
+      - "*"
+    multi-ecosystem-group: "ci-deps"
+    open-pull-requests-limit: 1
 
   - package-ecosystem: "pre-commit"
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
-      - "ci"
-    open-pull-requests-limit: 5
-
-  # If you add a Node-based action with package.json, uncomment:
-  # - package-ecosystem: "npm"
-  #   directory: "/"
-  #   schedule:
-  #     interval: "weekly"
-  #   labels:
-  #     - "dependencies"
-  #     - "ci"
-
-  # If you add Python tooling with requirements/pyproject, uncomment:
-  # - package-ecosystem: "pip"
-  #   directory: "/"
-  #   schedule:
-  #     interval: "weekly"
-  #   labels:
-  #     - "dependencies"
-  #     - "ci"
+    directory: "/"
+    patterns:
+      - "*"
+    multi-ecosystem-group: "ci-deps"
+    open-pull-requests-limit: 1
