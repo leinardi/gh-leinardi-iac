@@ -1,8 +1,18 @@
 version: 2
+enable-beta-ecosystems: true # Required to use the Pre-Commit ecosystems
 updates:
   # Keep GitHub Actions used in this repo up to date
   - package-ecosystem: "github-actions"
     directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "ci"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "pre-commit"
+    directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
     labels:
