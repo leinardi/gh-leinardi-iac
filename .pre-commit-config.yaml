@@ -68,7 +68,7 @@ repos:
           - types-setuptools
         stages: [manual]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.7
+    rev: v0.15.1
     hooks:
       - id: ruff-check
         args: ["--fix"]
