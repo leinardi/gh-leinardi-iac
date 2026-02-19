@@ -1,25 +1,23 @@
 version: 2
 enable-beta-ecosystems: true # Required for the pre-commit ecosystem
 
-multi-ecosystem-groups:
-  ci-deps:
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
-      - "ci"
-
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
-    patterns:
-      - "*"
-    multi-ecosystem-group: "ci-deps"
-    open-pull-requests-limit: 1
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "ci"]
+    groups:
+      github-actions:
+        patterns:
+          - "*"
 
   - package-ecosystem: "pre-commit"
     directory: "/"
-    patterns:
-      - "*"
-    multi-ecosystem-group: "ci-deps"
-    open-pull-requests-limit: 1
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "ci"]
+    groups:
+      pre-commit-hooks:
+        patterns:
+          - "*"
