@@ -21,7 +21,8 @@
 # SOFTWARE.
 
 provider "github" {
-  owner = var.github_owner
+  owner             = var.github_owner
+  parallel_requests = true
   # token comes from either:
   # - gh CLI (locally)
   # - GitHub App token (CI)
