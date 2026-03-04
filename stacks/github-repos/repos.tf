@@ -35,62 +35,11 @@ locals {
   }
 }
 
-module "repo_make_common" {
+module "repo_awtrix_controller" {
   source = "../../modules/github-repo-stack"
 
-  repo_name   = "make-common"
-  description = "Shared Makefile snippets and reusable tasks."
-  topics      = ["makefile", "automation", "tooling"]
-  template    = local.default_template
-
-  enable_rulesets_on_private = var.enable_rulesets_on_private
-}
-
-module "repo_gotilert" {
-  source = "../../modules/github-repo-stack"
-
-  repo_name   = "gotilert"
-  description = "A small Gotify-compatible HTTP shim that forwards messages to Alertmanager."
-  topics      = ["alertmanager", "gotify", "monitoring"]
-  template    = local.default_template
-
-  enable_rulesets_on_private = var.enable_rulesets_on_private
-}
-
-module "repo_gh_reusable_workflows" {
-  source = "../../modules/github-repo-stack"
-
-  repo_name   = "gh-reusable-workflows"
-  description = "Reusable GitHub Actions workflows for my projects."
-  topics      = ["github-actions", "reusable-workflows", "ci"]
-
-  enable_rulesets_on_private = var.enable_rulesets_on_private
-}
-
-module "repo_jdinstaller_macos" {
-  source = "../../modules/github-repo-stack"
-
-  repo_name   = "JDInstaller-macOS"
-  description = "An Ansible playbook to automate the setup of macOS personalizations."
-  topics      = ["ansible", "macos", "automation"]
-
-  enable_rulesets_on_private = var.enable_rulesets_on_private
-}
-
-module "repo_swarm_scheduler_exporter" {
-  source = "../../modules/github-repo-stack"
-
-  repo_name   = "swarm-scheduler-exporter"
-  description = "Prometheus exporter for Docker Swarm focused on task state visibility, accurate desired replicas, and operability at scale."
-  topics      = ["prometheus", "docker-swarm", "exporter", "monitoring"]
-
-  enable_rulesets_on_private = var.enable_rulesets_on_private
-}
-
-module "repo_kotlin_awtrix_light" {
-  source = "../../modules/github-repo-stack"
-
-  repo_name = "kotlin-awtrix-light"
+  repo_name  = "awtrix-controller"
+  visibility = "private"
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
@@ -105,21 +54,22 @@ module "repo_dotfiles" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
-module "repo_homelab" {
-  source = "../../modules/github-repo-stack"
-
-  repo_name  = "homelab"
-  visibility = "private"
-
-  enable_rulesets_on_private = var.enable_rulesets_on_private
-}
-
 module "repo_gh_leinardi_iac" {
   source = "../../modules/github-repo-stack"
 
   repo_name   = "gh-leinardi-iac"
   description = "OpenTofu-managed GitHub repositories, templates, and rulesets for the leinardi account"
   topics      = ["opentofu", "automation"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gh_reusable_workflows" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gh-reusable-workflows"
+  description = "Reusable GitHub Actions workflows for my projects."
+  topics      = ["github-actions", "reusable-workflows", "ci"]
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
@@ -285,6 +235,65 @@ module "repo_gha_pre_commit_yamllint_reviewdog" {
   description = "GitHub Action to run yamllint via pre-commit and comment results on PRs using reviewdog."
   topics      = ["github-actions", "pre-commit", "yamllint", "reviewdog"]
   template    = local.reviewdog_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_gotilert" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gotilert"
+  description = "A small Gotify-compatible HTTP shim that forwards messages to Alertmanager."
+  topics      = ["alertmanager", "gotify", "monitoring"]
+  template    = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_homelab" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "homelab"
+  visibility = "private"
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_jdinstaller_macos" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "JDInstaller-macOS"
+  description = "An Ansible playbook to automate the setup of macOS personalizations."
+  topics      = ["ansible", "macos", "automation"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_kotlin_awtrix_light" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name = "kotlin-awtrix-light"
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_make_common" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "make-common"
+  description = "Shared Makefile snippets and reusable tasks."
+  topics      = ["makefile", "automation", "tooling"]
+  template    = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_swarm_scheduler_exporter" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "swarm-scheduler-exporter"
+  description = "Prometheus exporter for Docker Swarm focused on task state visibility, accurate desired replicas, and operability at scale."
+  topics      = ["prometheus", "docker-swarm", "exporter", "monitoring"]
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
