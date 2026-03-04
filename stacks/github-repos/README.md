@@ -19,6 +19,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_repo_awtrix_controller"></a> [repo\_awtrix\_controller](#module\_repo\_awtrix\_controller) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_dotfiles"></a> [repo\_dotfiles](#module\_repo\_dotfiles) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gh_leinardi_iac"></a> [repo\_gh\_leinardi\_iac](#module\_repo\_gh\_leinardi\_iac) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gh_reusable_workflows"></a> [repo\_gh\_reusable\_workflows](#module\_repo\_gh\_reusable\_workflows) | ../../modules/github-repo-stack | n/a |
