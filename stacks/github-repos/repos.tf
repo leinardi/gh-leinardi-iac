@@ -38,8 +38,7 @@ locals {
 module "repo_awtrix_controller" {
   source = "../../modules/github-repo-stack"
 
-  repo_name  = "awtrix-controller"
-  visibility = "private"
+  repo_name = "awtrix-controller"
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
