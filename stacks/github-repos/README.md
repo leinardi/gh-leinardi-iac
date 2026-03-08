@@ -43,6 +43,7 @@
 | <a name="module_repo_jdinstaller_macos"></a> [repo\_jdinstaller\_macos](#module\_repo\_jdinstaller\_macos) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_kotlin_awtrix_light"></a> [repo\_kotlin\_awtrix\_light](#module\_repo\_kotlin\_awtrix\_light) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_make_common"></a> [repo\_make\_common](#module\_repo\_make\_common) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_snapmaker_u1"></a> [repo\_snapmaker\_u1](#module\_repo\_snapmaker\_u1) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_swarm_scheduler_exporter"></a> [repo\_swarm\_scheduler\_exporter](#module\_repo\_swarm\_scheduler\_exporter) | ../../modules/github-repo-stack | n/a |
 | <a name="module_template_default_labels_wipe"></a> [template\_default\_labels\_wipe](#module\_template\_default\_labels\_wipe) | ../../modules/github-labels | n/a |
 | <a name="module_template_pre_commit_reviewdog_labels_wipe"></a> [template\_pre\_commit\_reviewdog\_labels\_wipe](#module\_template\_pre\_commit\_reviewdog\_labels\_wipe) | ../../modules/github-labels | n/a |
