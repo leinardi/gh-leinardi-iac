@@ -287,6 +287,17 @@ module "repo_make_common" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_snapmaker_u1" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "snapmaker-u1"
+  topics     = ["snapmaker", "u1", "3d-printing"]
+  visibility = "private"
+  template   = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_swarm_scheduler_exporter" {
   source = "../../modules/github-repo-stack"
 
