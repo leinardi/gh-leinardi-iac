@@ -43,6 +43,16 @@ module "repo_awtrix_controller" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_ddwrt_r7000" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "ddwrt-r7000"
+  visibility = "private"
+  template   = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_dotfiles" {
   source = "../../modules/github-repo-stack"
 
