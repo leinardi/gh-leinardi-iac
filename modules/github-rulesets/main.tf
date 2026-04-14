@@ -32,11 +32,13 @@ resource "github_repository_ruleset" "default_branch_protection" {
   target      = "branch"
   enforcement = "active"
 
-  # Admin repository role can bypass via PR only
-  bypass_actors {
-    actor_id    = 5
-    actor_type  = "RepositoryRole"
-    bypass_mode = "pull_request"
+  dynamic "bypass_actors" {
+    for_each = var.bypass_actors
+    content {
+      actor_id    = bypass_actors.value.actor_id
+      actor_type  = bypass_actors.value.actor_type
+      bypass_mode = bypass_actors.value.bypass_mode
+    }
   }
 
   conditions {
