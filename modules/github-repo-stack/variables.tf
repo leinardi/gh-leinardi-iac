@@ -331,3 +331,18 @@ variable "default_branch_required_checks" {
   type    = list(string)
   default = []
 }
+
+variable "default_branch_bypass_actors" {
+  type = list(object({
+    actor_id    = number
+    actor_type  = string
+    bypass_mode = string
+  }))
+  default = [
+    {
+      actor_id    = 5
+      actor_type  = "RepositoryRole"
+      bypass_mode = "pull_request"
+    }
+  ]
+}
