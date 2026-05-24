@@ -308,6 +308,16 @@ module "repo_snapmaker_u1" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_swarm_device_access" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "swarm-device-access"
+  description = "Linux daemon that enables GPU, USB, and other /dev device passthrough for Docker Swarm services by injecting cgroup device-allow rules for bind-mounted devices."
+  topics      = ["docker-swarm", "device-passthrough", "cgroups", "ebpf"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_swarm_scheduler_exporter" {
   source = "../../modules/github-repo-stack"
 

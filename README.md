@@ -236,7 +236,7 @@ module "repo_existing_repo" {
 1. Import the repository into the state:
 
 ```bash
-make tofu-command "import 'module.repo_existing_repo.module.repo.github_repository.this[\"existing-repo\"]' existing-repo"
+make tofu-command TOFU_ARGS="import 'module.repo_existing_repo.module.repo.github_repository.this[\"existing-repo\"]' existing-repo"
 ```
 
 1. Plan/apply:
