@@ -53,12 +53,21 @@ module "repo_ddwrt_r7000" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_driftlock" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "driftlock"
+  visibility = "private"
+  template   = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_dotfiles" {
   source = "../../modules/github-repo-stack"
 
   repo_name  = "dotfiles"
   visibility = "private"
-  template   = local.default_template
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
