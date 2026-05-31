@@ -22,6 +22,7 @@
 | <a name="module_repo_awtrix_controller"></a> [repo\_awtrix\_controller](#module\_repo\_awtrix\_controller) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_ddwrt_r7000"></a> [repo\_ddwrt\_r7000](#module\_repo\_ddwrt\_r7000) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_dotfiles"></a> [repo\_dotfiles](#module\_repo\_dotfiles) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_driftlock"></a> [repo\_driftlock](#module\_repo\_driftlock) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gh_leinardi_iac"></a> [repo\_gh\_leinardi\_iac](#module\_repo\_gh\_leinardi\_iac) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gh_reusable_workflows"></a> [repo\_gh\_reusable\_workflows](#module\_repo\_gh\_reusable\_workflows) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gha_pre_commit_actionlint_reviewdog"></a> [repo\_gha\_pre\_commit\_actionlint\_reviewdog](#module\_repo\_gha\_pre\_commit\_actionlint\_reviewdog) | ../../modules/github-repo-stack | n/a |
