@@ -53,10 +53,10 @@ module "repo_ddwrt_r7000" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
-module "repo_driftlock" {
+module "repo_runhold" {
   source = "../../modules/github-repo-stack"
 
-  repo_name  = "driftlock"
+  repo_name  = "runhold"
   visibility = "private"
   template   = local.default_template
 
