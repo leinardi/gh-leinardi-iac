@@ -92,6 +92,35 @@ module "repo_gh_reusable_workflows" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_gha_pre_commit_reviewdog_actions" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gha-pre-commit-reviewdog-actions"
+  description = "Monorepo for GitHub Actions that run pre-commit hooks and comment results on PRs using reviewdog."
+  topics = [
+    "github-actions",
+    "pre-commit",
+    "reviewdog",
+    "actionlint",
+    "ansible-lint",
+    "hooks",
+    "markdownlint-cli2",
+    "mypy",
+    "prettier",
+    "rain-format",
+    "ruff",
+    "shellcheck",
+    "sqlfluff",
+    "tofu-docs",
+    "tofu-fmt",
+    "tofu-tflint",
+    "tofu-trivy",
+    "yamllint",
+  ]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_gha_pre_commit_actionlint_reviewdog" {
   source = "../../modules/github-repo-stack"
 

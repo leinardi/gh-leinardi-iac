@@ -31,6 +31,7 @@
 | <a name="module_repo_gha_pre_commit_mypy_reviewdog"></a> [repo\_gha\_pre\_commit\_mypy\_reviewdog](#module\_repo\_gha\_pre\_commit\_mypy\_reviewdog) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gha_pre_commit_prettier_reviewdog"></a> [repo\_gha\_pre\_commit\_prettier\_reviewdog](#module\_repo\_gha\_pre\_commit\_prettier\_reviewdog) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gha_pre_commit_rain_format_reviewdog"></a> [repo\_gha\_pre\_commit\_rain\_format\_reviewdog](#module\_repo\_gha\_pre\_commit\_rain\_format\_reviewdog) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gha_pre_commit_reviewdog_actions"></a> [repo\_gha\_pre\_commit\_reviewdog\_actions](#module\_repo\_gha\_pre\_commit\_reviewdog\_actions) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gha_pre_commit_ruff_reviewdog"></a> [repo\_gha\_pre\_commit\_ruff\_reviewdog](#module\_repo\_gha\_pre\_commit\_ruff\_reviewdog) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gha_pre_commit_shellcheck_reviewdog"></a> [repo\_gha\_pre\_commit\_shellcheck\_reviewdog](#module\_repo\_gha\_pre\_commit\_shellcheck\_reviewdog) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gha_pre_commit_sqlfluff_reviewdog"></a> [repo\_gha\_pre\_commit\_sqlfluff\_reviewdog](#module\_repo\_gha\_pre\_commit\_sqlfluff\_reviewdog) | ../../modules/github-repo-stack | n/a |
