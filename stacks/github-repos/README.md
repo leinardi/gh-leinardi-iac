@@ -35,14 +35,12 @@
 | <a name="module_repo_swarm_device_access"></a> [repo\_swarm\_device\_access](#module\_repo\_swarm\_device\_access) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_swarm_scheduler_exporter"></a> [repo\_swarm\_scheduler\_exporter](#module\_repo\_swarm\_scheduler\_exporter) | ../../modules/github-repo-stack | n/a |
 | <a name="module_template_default_labels_wipe"></a> [template\_default\_labels\_wipe](#module\_template\_default\_labels\_wipe) | ../../modules/github-labels | n/a |
-| <a name="module_template_pre_commit_reviewdog_labels_wipe"></a> [template\_pre\_commit\_reviewdog\_labels\_wipe](#module\_template\_pre\_commit\_reviewdog\_labels\_wipe) | ../../modules/github-labels | n/a |
 
 ## Resources
 
 | Name | Type |
 | ---- | ---- |
 | [github_repository.default_template](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository) | resource |
-| [github_repository.pre_commit_reviewdog_template](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository) | resource |
 
 ## Inputs
 
