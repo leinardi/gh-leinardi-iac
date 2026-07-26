@@ -165,6 +165,16 @@ module "repo_make_common" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_opencode_swap" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "opencode-swap"
+  topics     = ["opencode", "openai"]
+  visibility = "private"
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_snapmaker_u1" {
   source = "../../modules/github-repo-stack"
 

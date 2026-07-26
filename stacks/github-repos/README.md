@@ -30,6 +30,7 @@
 | <a name="module_repo_jdinstaller_macos"></a> [repo\_jdinstaller\_macos](#module\_repo\_jdinstaller\_macos) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_kotlin_awtrix_light"></a> [repo\_kotlin\_awtrix\_light](#module\_repo\_kotlin\_awtrix\_light) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_make_common"></a> [repo\_make\_common](#module\_repo\_make\_common) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_opencode_swap"></a> [repo\_opencode\_swap](#module\_repo\_opencode\_swap) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_runhold"></a> [repo\_runhold](#module\_repo\_runhold) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_snapmaker_u1"></a> [repo\_snapmaker\_u1](#module\_repo\_snapmaker\_u1) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_swarm_device_access"></a> [repo\_swarm\_device\_access](#module\_repo\_swarm\_device\_access) | ../../modules/github-repo-stack | n/a |
