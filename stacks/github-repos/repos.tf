@@ -165,6 +165,15 @@ module "repo_make_common" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_opencode_review_loop" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "opencode-review-loop"
+  visibility = "private"
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_opencode_swap" {
   source = "../../modules/github-repo-stack"
 
