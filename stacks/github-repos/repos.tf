@@ -184,6 +184,15 @@ module "repo_opencode_swap" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_pointerparity" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name  = "pointerparity"
+  visibility = "private"
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_snapmaker_u1" {
   source = "../../modules/github-repo-stack"
 
