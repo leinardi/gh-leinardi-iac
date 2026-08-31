@@ -30,6 +30,17 @@ locals {
 
 }
 
+module "repo_adversarial_review_loop" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "adversarial-review-loop"
+  description = "Claude Code plugin that gates every phase commit on an external adversarial review: a fresh, isolated reviewer process must pass the exact tree before the commit is allowed."
+  topics      = ["claude-code", "claude-code-plugin", "code-review", "opencode", "hooks", "python", "quality-gate"]
+  visibility  = "private"
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_awtrix_controller" {
   source = "../../modules/github-repo-stack"
 
@@ -161,15 +172,6 @@ module "repo_make_common" {
   description = "Shared Makefile snippets and reusable tasks."
   topics      = ["makefile", "automation", "tooling"]
   template    = local.default_template
-
-  enable_rulesets_on_private = var.enable_rulesets_on_private
-}
-
-module "repo_opencode_review_loop" {
-  source = "../../modules/github-repo-stack"
-
-  repo_name  = "opencode-review-loop"
-  visibility = "private"
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
