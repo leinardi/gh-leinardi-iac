@@ -36,7 +36,13 @@ module "repo_adversarial_review_loop" {
   repo_name   = "adversarial-review-loop"
   description = "Claude Code plugin that gates every phase commit on an external adversarial review: a fresh, isolated reviewer process must pass the exact tree before the commit is allowed."
   topics      = ["claude-code", "claude-code-plugin", "code-review", "opencode", "hooks", "python", "quality-gate"]
-  visibility  = "private"
+
+  # Gate merges on the CI job that runs `make test` (.github/workflows/ci.yaml).
+  # Only `test` -- the reviewdog jobs in that workflow are gated on the event being a
+  # pull_request, so they never run on the workflow_dispatch that release.yaml fires at
+  # its own bump PR (a GITHUB_TOKEN-authored PR does not fire pull_request). Requiring
+  # one of them would leave every release PR permanently unmergeable.
+  default_branch_required_checks = ["test"]
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
@@ -172,6 +178,28 @@ module "repo_make_common" {
   description = "Shared Makefile snippets and reusable tasks."
   topics      = ["makefile", "automation", "tooling"]
   template    = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
+module "repo_monmux" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "monmux"
+  description = "Fail-closed CLI that switches supported monitors between video inputs on Linux and macOS: it writes only when the attached monitor is identified in a built-in catalog and the requested input is verified for that model."
+  topics = [
+    "monitor",
+    "monitor-control",
+    "input-switching",
+    "ddc",
+    "ddc-ci",
+    "ddcutil",
+    "m1ddc",
+    "cli",
+    "go",
+    "linux",
+    "macos",
+  ]
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
