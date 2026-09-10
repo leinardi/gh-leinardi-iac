@@ -242,6 +242,17 @@ variable "label_overrides" {
   description = "Per-repo label overrides/additions"
 }
 
+variable "actions_variables" {
+  type        = map(string)
+  default     = {}
+  description = <<EOT
+Repository-level GitHub Actions variables (name -> value).
+
+Names are normalized to uppercase. Multiline values are supported via HCL
+heredoc. Never put secrets here: this configuration is public.
+EOT
+}
+
 # Repo defaults
 variable "allow_auto_merge" {
   # Keep parity with your github-repositories module default:

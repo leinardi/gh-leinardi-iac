@@ -201,6 +201,17 @@ module "repo_monmux" {
     "macos",
   ]
 
+  label_overrides = {
+    "catalog" = {
+      description = "Supported-monitor catalog: entries, evidence, enabling"
+      color       = "#5319E7"
+    }
+  }
+
+  actions_variables = {
+    CLOUDSMITH_SERVICE_SLUG = "github-actions-release-0awa"
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
