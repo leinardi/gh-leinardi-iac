@@ -144,6 +144,33 @@ module "repo_gotilert" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_homebrew_tap" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "homebrew-tap"
+  description = "Homebrew tap for my projects."
+  topics      = ["homebrew", "homebrew-tap", "homebrew-cask", "macos", "packaging"]
+
+  # Shared tap, one per account rather than one per project: every project that
+  # ships to Homebrew adds its own file here (Casks/<name>.rb, Formula/<name>.rb),
+  # and `brew install leinardi/tap/<name>` resolves any of them. monmux is the
+  # first; adding another needs no change in this stack.
+  #
+  # Nothing here is written by hand: each project's release pipeline pushes its
+  # updated cask straight to the default branch with a token. The default-branch
+  # ruleset requires a pull request with an approving review, and the only bypass
+  # actor is admin with bypass_mode = "pull_request", which bypasses via a PR
+  # rather than around it -- so leaving the ruleset on would fail every release at
+  # the moment it publishes.
+  default_branch_ruleset_enabled = false
+
+  # Packaging bugs belong on the repository that produces the cask or formula, not
+  # on the tap that only carries the generated file.
+  has_issues = false
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_homelab" {
   source = "../../modules/github-repo-stack"
 

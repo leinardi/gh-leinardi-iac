@@ -27,6 +27,7 @@
 | <a name="module_repo_gh_reusable_workflows"></a> [repo\_gh\_reusable\_workflows](#module\_repo\_gh\_reusable\_workflows) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gha_pre_commit_reviewdog_actions"></a> [repo\_gha\_pre\_commit\_reviewdog\_actions](#module\_repo\_gha\_pre\_commit\_reviewdog\_actions) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gotilert"></a> [repo\_gotilert](#module\_repo\_gotilert) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_homebrew_tap"></a> [repo\_homebrew\_tap](#module\_repo\_homebrew\_tap) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_homelab"></a> [repo\_homelab](#module\_repo\_homelab) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_jdinstaller_macos"></a> [repo\_jdinstaller\_macos](#module\_repo\_jdinstaller\_macos) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_kotlin_awtrix_light"></a> [repo\_kotlin\_awtrix\_light](#module\_repo\_kotlin\_awtrix\_light) | ../../modules/github-repo-stack | n/a |
