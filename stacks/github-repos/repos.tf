@@ -133,6 +133,57 @@ module "repo_gha_pre_commit_reviewdog_actions" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_gnome_shell_extension_monmux" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gnome-shell-extension-monmux"
+  description = "GNOME Shell extension that switches supported monitors between video inputs from the top panel, through the monmux CLI. It takes no decision of its own: monmux identifies each monitor and refuses anything its catalog does not enable."
+  topics = [
+    "gnome-shell-extension",
+    "gnome-shell",
+    "gnome",
+    "gjs",
+    "javascript",
+    "monitor",
+    "monitor-control",
+    "input-switching",
+    "ddc",
+    "ddc-ci",
+    "monmux",
+    "linux",
+  ]
+
+  # The repository is created empty and the existing local history is pushed
+  # into it. auto_init would land an initial commit carrying the module's
+  # default MIT LICENSE, which is both the wrong licence for this project --
+  # extensions.gnome.org expects GPL-2.0-or-later, and that is what every source
+  # file's header says -- and a commit the local `main` does not descend from,
+  # so the first push would need a force or a merge.
+  auto_init        = false
+  license_template = null
+
+  label_overrides = {
+    # This repository is only the extension. Anything about which monitor may be
+    # switched, and how, belongs to leinardi/monmux, and redirecting is the most
+    # common triage action here -- the issue templates route on it too.
+    "upstream" = {
+      description = "Belongs to leinardi/monmux, not to the extension"
+      color       = "#C5DEF5"
+    }
+    "translations" = {
+      description = "Translations and localisation"
+      color       = "#0E8A16"
+    }
+  }
+
+  # Gate merges on the job that runs lint, type-check, tests, the schema and the
+  # packed bundle (.github/workflows/ci.yaml). The reviewdog jobs comment on a
+  # pull request rather than gate it.
+  default_branch_required_checks = ["extension"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_gotilert" {
   source = "../../modules/github-repo-stack"
 
