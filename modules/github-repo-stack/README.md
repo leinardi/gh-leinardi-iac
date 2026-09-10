@@ -17,6 +17,7 @@ No providers.
 
 | Name | Source | Version |
 | ---- | ------ | ------- |
+| <a name="module_actions_variables"></a> [actions\_variables](#module\_actions\_variables) | ../github-actions-variables | n/a |
 | <a name="module_labels"></a> [labels](#module\_labels) | ../github-labels | n/a |
 | <a name="module_repo"></a> [repo](#module\_repo) | ../github-repositories | n/a |
 | <a name="module_rulesets"></a> [rulesets](#module\_rulesets) | ../github-rulesets | n/a |
@@ -29,6 +30,7 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_actions_variables"></a> [actions\_variables](#input\_actions\_variables) | Repository-level GitHub Actions variables (name -> value).<br/><br/>Names are normalized to uppercase. Multiline values are supported via HCL<br/>heredoc. Never put secrets here: this configuration is public. | `map(string)` | `{}` | no |
 | <a name="input_allow_auto_merge"></a> [allow\_auto\_merge](#input\_allow\_auto\_merge) | Repo defaults | `bool` | `null` | no |
 | <a name="input_allow_merge_commit"></a> [allow\_merge\_commit](#input\_allow\_merge\_commit) | n/a | `bool` | `true` | no |
 | <a name="input_allow_rebase_merge"></a> [allow\_rebase\_merge](#input\_allow\_rebase\_merge) | n/a | `bool` | `false` | no |

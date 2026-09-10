@@ -73,6 +73,14 @@ module "labels" {
   depends_on = [module.repo]
 }
 
+module "actions_variables" {
+  source     = "../github-actions-variables"
+  repository = var.repo_name
+  variables  = var.actions_variables
+
+  depends_on = [module.repo]
+}
+
 module "rulesets" {
   source = "../github-rulesets"
 

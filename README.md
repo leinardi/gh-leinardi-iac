@@ -24,6 +24,7 @@ At the moment, this repository manages:
     - archival behavior
 - Repository templates (used at creation time)
 - Issue labels (authoritative sync)
+- GitHub Actions variables (repository level, additive)
 - Repository rulesets
     - default branch protection
     - immutable tags
@@ -37,8 +38,9 @@ The scope may grow over time as more GitHub features are managed declaratively.
 ├── modules/
 │   ├── github-repositories/      # Generic module: manages github_repository resources
 │   ├── github-labels/            # Generic module: manages issue labels (authoritative or additive)
+│   ├── github-actions-variables/ # Generic module: manages repo-level Actions variables
 │   ├── github-repo-rulesets/     # Generic module: manages rulesets (branch + tag)
-│   └── github-repo-stack/        # Wrapper module: sensible defaults + composes the 3 modules above
+│   └── github-repo-stack/        # Wrapper module: sensible defaults + composes the 4 modules above
 │
 ├── stacks/
 │   └── github-repos/              # Concrete GitHub account configuration
@@ -61,6 +63,7 @@ Contains reusable OpenTofu modules:
 
     - `github-repositories/`
     - `github-labels/`
+    - `github-actions-variables/`
     - `github-repo-rulesets/`
 
 This keeps the stack configuration readable and reduces “blast radius”: each repo is managed by its own module call.
@@ -218,6 +221,34 @@ module "repo_new_repo_from_template" {
   }
 }
 ```
+
+### Manage GitHub Actions variables
+
+Repository-level Actions variables are declared inline on the repo's module block via
+`actions_variables`. Names are normalized to uppercase and multiline values are supported
+through HCL heredoc syntax:
+
+```hcl
+module "repo_new_repo" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name = "new-repo"
+
+  actions_variables = {
+    SINGLE_LINE = "value"
+    MULTI_LINE  = <<-EOT
+      line one
+      line two
+    EOT
+  }
+}
+```
+
+Management is additive: variables created outside OpenTofu are left untouched, and removing
+an entry here deletes only that variable.
+
+⚠️ This repository is public: `actions_variables` is for non-sensitive values only.
+Secrets must never be committed here.
 
 ### Import an existing repository
 
