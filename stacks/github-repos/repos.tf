@@ -231,6 +231,16 @@ module "repo_homelab" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_jdinstaller" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "JDInstaller"
+  description = "An Ansible playbook to automate the setup of a personalized Ubuntu"
+  topics      = ["ansible", "ansible-playbook", "ansible-role", "automation", "ubuntu", "davinci-resolve"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_jdinstaller_macos" {
   source = "../../modules/github-repo-stack"
 
