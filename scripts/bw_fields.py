@@ -113,7 +113,7 @@ def _find_item_id(log: Logger, *, bw_session: str, item_id: str | None, item_nam
     items = _parse_json("bw list items", items_raw, log=log, safe_to_show=True)
 
     if not isinstance(items, list):
-        raise RuntimeError("bw list items did not return a JSON list")
+        raise TypeError("bw list items did not return a JSON list")
     if len(items) != 1:
         raise RuntimeError(f"Bitwarden search for '{item_name}' returned {len(items)} items. Use --bw-item-id to disambiguate.")
 
@@ -129,11 +129,11 @@ def _get_item_fields(log: Logger, *, bw_session: str, bw_item_id: str) -> dict[s
     item = _parse_json("bw get item", item_raw, log=log, safe_to_show=False)
 
     if not isinstance(item, dict):
-        raise RuntimeError("bw get item did not return a JSON object")
+        raise TypeError("bw get item did not return a JSON object")
 
     fields = item.get("fields") or []
     if not isinstance(fields, list):
-        raise RuntimeError("Bitwarden item fields are not a list")
+        raise TypeError("Bitwarden item fields are not a list")
 
     out: dict[str, str] = {}
     for f in fields:
@@ -200,6 +200,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("ERROR: interrupted", file=sys.stderr)
         raise SystemExit(130) from None
-    except Exception as ex:
+    except Exception as ex:  # noqa: BLE001 -- top level: print any failure as one line, without a traceback
         print(f"ERROR: {ex}", file=sys.stderr)
         raise SystemExit(1) from None

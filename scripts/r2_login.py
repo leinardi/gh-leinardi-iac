@@ -88,7 +88,7 @@ def _bw_fields(log: Logger, *, item_id: str | None, item_name: str | None) -> di
         raise RuntimeError(f"bw_fields.py returned invalid JSON: {ex}") from ex
 
     if not isinstance(out, dict):
-        raise RuntimeError("bw_fields.py did not return a JSON object")
+        raise TypeError("bw_fields.py did not return a JSON object")
 
     # mypy-friendly narrowing
     fields: dict[str, str] = {}
@@ -148,7 +148,7 @@ def cf_temp_creds(
 
     result = j.get("result")
     if not isinstance(result, dict):
-        raise RuntimeError("Cloudflare API response missing result object")
+        raise TypeError("Cloudflare API response missing result object")
 
     required = ("accessKeyId", "secretAccessKey", "sessionToken")
     out: dict[str, str] = {}
@@ -261,6 +261,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("ERROR: interrupted", file=sys.stderr)
         raise SystemExit(130) from None
-    except Exception as ex:
+    except Exception as ex:  # noqa: BLE001 -- top level: print any failure as one line, without a traceback
         print(f"ERROR: {ex}", file=sys.stderr)
         raise SystemExit(1) from None
