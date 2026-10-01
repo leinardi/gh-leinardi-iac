@@ -39,19 +39,24 @@ The scope may grow over time as more GitHub features are managed declaratively.
 │   ├── github-repositories/      # Generic module: manages github_repository resources
 │   ├── github-labels/            # Generic module: manages issue labels (authoritative or additive)
 │   ├── github-actions-variables/ # Generic module: manages repo-level Actions variables
-│   ├── github-repo-rulesets/     # Generic module: manages rulesets (branch + tag)
+│   ├── github-rulesets/          # Generic module: manages rulesets (branch + tag)
 │   └── github-repo-stack/        # Wrapper module: sensible defaults + composes the 4 modules above
 │
 ├── stacks/
 │   └── github-repos/              # Concrete GitHub account configuration
 │       ├── repos.tf               # One module call per repository
 │       ├── repos-templates.tf     # Template repositories
+│       ├── defaults.tf            # Settings every repository starts from
+│       ├── moved.tf               # moved blocks for renames still to be applied
 │       ├── backend.tf             # Remote state configuration
 │       ├── providers.tf           # Provider configuration
-│       └── variables.tf           # Stack inputs
+│       ├── variables.tf           # Stack inputs
+│       └── versions.tf            # OpenTofu and provider versions
 │
-├── .pre-commit-config.yaml        # Pre-commit checks (fmt, validate, lint, security)
+├── scripts/                       # `make login`: temporary R2 credentials from Bitwarden
+├── .pre-commit-config.yaml        # Pre-commit checks (fmt, validate, lint, security, commit messages)
 ├── .tflint.hcl                    # TFLint configuration
+├── AGENTS.md                      # Conventions and commit rules
 └── README.md
 ```
 
@@ -64,7 +69,7 @@ Contains reusable OpenTofu modules:
     - `github-repositories/`
     - `github-labels/`
     - `github-actions-variables/`
-    - `github-repo-rulesets/`
+    - `github-rulesets/`
 
 This keeps the stack configuration readable and reduces “blast radius”: each repo is managed by its own module call.
 
@@ -103,10 +108,11 @@ This is controlled through the wrapper module via:
 
 ## 🔐 Authentication model
 
-This setup is designed to work both locally and in CI:
+Changes are planned and applied locally; CI only lints the configuration and never runs `tofu plan` or `tofu apply`.
 
-- **Locally**: authentication is handled via the GitHub CLI (`gh auth login`)
-- **CI**: authentication is performed via GitHub Actions (token or GitHub App)
+- **GitHub**: authentication is handled via the GitHub CLI (`gh auth login`)
+- **State backend**: `make login` mints temporary Cloudflare R2 credentials from a Bitwarden item into the
+  `r2-gh-leinardi-iac` AWS profile, which every `tofu-*` target uses
 
 No access tokens are committed to the repository.
 
@@ -118,7 +124,6 @@ This ensures:
 
 - state is not stored in Git
 - safe concurrent usage (locking)
-- easy automation via GitHub Actions
 
 ## 🚀 Getting started
 
@@ -130,6 +135,7 @@ All common operations (checks, initialization, planning, applying) are exposed a
 - OpenTofu
 - `pre-commit`
 - GitHub CLI (`gh`)
+- Bitwarden CLI (`bw`) and Python 3, for `make login`
 - Make
 - Valid GitHub authentication (see below)
 
@@ -149,10 +155,11 @@ make check
 
 ### Authentication
 
-Authenticate via GitHub CLI:
+Authenticate via GitHub CLI, then mint the state backend credentials:
 
 ```bash
 gh auth login
+make login
 ```
 
 ### OpenTofu workflow
@@ -300,3 +307,9 @@ If you already have labels or rulesets on that repo, the next plan will reconcil
   ```
 
   (Use `tofu-clean-all` for a more aggressive cleanup.)
+
+## 🤝 Commits and security
+
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with a scope, checked by the `commit-msg`
+hook that `make pre-commit-install` installs and by CI on every pull request; [`AGENTS.md`](AGENTS.md) has the rules. To report a
+vulnerability, see [`SECURITY.md`](SECURITY.md).
