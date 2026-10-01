@@ -1,6 +1,6 @@
 # github-rulesets
 
-<!-- markdownlint-disable MD034 MD060 -->
+<!-- markdownlint-disable MD034 MD060 table-format -->
 <!-- BEGINNING OF PRE-COMMIT-OPENTOFU DOCS HOOK -->
 ## Requirements
 
@@ -41,4 +41,4 @@ No modules.
 
 No outputs.
 <!-- END OF PRE-COMMIT-OPENTOFU DOCS HOOK -->
-<!-- markdownlint-enable MD034 MD060 -->
+<!-- markdownlint-enable MD034 MD060 table-format -->

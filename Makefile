@@ -31,7 +31,7 @@ export AWS_PROFILE
 include $(addprefix $(MK_COMMON_DIR)/,$(MK_COMMON_FILES))
 
 # Include repo-local logic (no bootstrap; lives only in this repo)
--include $(addprefix $(REPO_ROOT)/.mk/,$(MK_LOCAL_FILES))
+include $(addprefix $(REPO_ROOT)/.mk/,$(MK_LOCAL_FILES))
 
 .PHONY: mk-common-update
 mk-common-update: ## Check for remote updates of shared .mk files
@@ -41,3 +41,12 @@ mk-common-update: ## Check for remote updates of shared .mk files
 	  "$(MK_COMMON_VERSION)" \
 	  "$(MK_COMMON_DIR)" \
 	  "$(MK_COMMON_FILES)"
+
+# -----------------------------------------------------------------------------
+# Adding new targets
+# -----------------------------------------------------------------------------
+# Do NOT add recipes directly to this file. Instead:
+#   - Project-specific targets -> new .mk/<fragment>.mk added to MK_LOCAL_FILES
+#   - Generic targets (useful beyond this repo) -> new or updated .mk/<fragment>.mk
+#     added to MK_COMMON_FILES, then open a PR to port the change upstream at
+#     https://github.com/leinardi/make-common so mk-common-update keeps working.

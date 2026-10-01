@@ -8,7 +8,7 @@ assignees: []
 ## Step 1: Are you in the right place?
 
 * [ ] I have checked that there are no duplicate active or recent issues (bugs, questions, or feature requests) describing this problem.
-* [ ] I am using the latest released version of this project (or have tested on the main/default branch).
+* [ ] I am using the latest `main` of this repository.
 
 ## Step 2: Describe your environment
 

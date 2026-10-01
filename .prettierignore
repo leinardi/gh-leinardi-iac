@@ -1,15 +1,3 @@
 # .gitignore
-/.galaxy/
-*.retry
-inventory/group_vars/_*.yml
-inventory/group_vars/local.yml
-.lock
-vault_password.txt
-secrets.dev.yaml
-secrets.prod.yaml
 *.iml
 .idea/*
-
-# DCLint
-roles/**/files/compose.yaml
-roles/**/files/*-compose.yaml
