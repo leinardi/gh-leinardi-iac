@@ -1,7 +1,12 @@
 name: CI
 
+# The authoritative check (pre-commit-all) runs on every pull request and every push to main; the
+# reviewdog jobs only annotate pull requests. ci-result is the one check a ruleset needs to require.
 on:
   pull_request:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency:
@@ -13,6 +18,84 @@ permissions:
   contents: read
 
 jobs:
+  # The authoritative lint gate: every pre-commit hook over every file, with the versions pinned in
+  # .pre-commit-config.yaml and the tools below. No hook is skipped: no other job runs one as its
+  # gate. Lint only: no tofu plan or apply, and no credentials for the state backend.
+  pre-commit-all:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.x"
+
+      - name: Install pre-commit
+        run: pip install --no-cache-dir pre-commit==4.6.2
+
+      # The tool versions below are pinned by hand (Dependabot does not track these inputs): tofu
+      # and terraform-docs at the releases the owner runs locally, which write the lock files and
+      # the module READMEs the tofu_validate and tofu_docs hooks compare against.
+      - name: Set up OpenTofu
+        uses: opentofu/setup-opentofu@a1320f892987e89d278cc92dc5adc984fb93aca4 # v2.0.2
+        with:
+          tofu_version: 1.12.6
+          # The wrapper rewrites tofu's output and exit handling for later steps; the hooks need
+          # the plain binary.
+          tofu_wrapper: false
+
+      - name: Set up TFLint
+        uses: terraform-linters/setup-tflint@6ffdbaa3be476b3431f7275c26966ef32ff60337 # v6.3.2
+        with:
+          tflint_version: v0.64.0
+
+      - name: Set up Trivy
+        uses: aquasecurity/setup-trivy@81e514348e19b6112ce2a7e3ecbafe19c1e1f567 # v0.3.1
+        with:
+          version: v0.75.0
+
+      # The digest is the release asset's, from
+      # gh api repos/terraform-docs/terraform-docs/releases/tags/<version>.
+      - name: Set up terraform-docs
+        env:
+          TERRAFORM_DOCS_VERSION: v0.22.0
+          TERRAFORM_DOCS_SHA256: 8ec66616777c66f3e622af4f2853e8ae399f38908ad4b262c9c526dd42501369
+        run: |
+          set -euo pipefail
+          archive="${RUNNER_TEMP}/terraform-docs.tar.gz"
+          curl -fsSL -o "${archive}" \
+            "https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
+          echo "${TERRAFORM_DOCS_SHA256}  ${archive}" | sha256sum --check --strict -
+          tar -xzf "${archive}" -C "${RUNNER_TEMP}" terraform-docs
+          sudo install -m 0755 "${RUNNER_TEMP}/terraform-docs" /usr/local/bin/terraform-docs
+          terraform-docs --version
+
+      # Restore only: pre-commit-warmup.yaml saves the entry on main under the same key.
+      - name: Restore the pre-commit cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ runner.os }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Run every pre-commit hook on every file
+        run: pre-commit run --all-files --show-diff-on-failure
+
+      # pre-commit fails a hook that modifies a tracked file, which covers the auto-fixing hooks
+      # (markdownlint fix, prettier, ruff, tofu fmt and docs, the lock files tofu init writes); this
+      # also fails on a file a hook creates, which its diff check does not see, so no fix can pass
+      # silently.
+      - name: Fail if a hook modified a file
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
+  # The reviewdog jobs below report inline review comments over a pull request's diff; a push or a
+  # dispatch has neither a pull request to comment on nor a base ref to diff against. Annotation
+  # only: pre-commit-all is the gate, so ci-result does not need them.
   actionlint:
     # The reviewdog reporters comment on a pull request; there is none to comment on otherwise.
     if: github.event_name == 'pull_request'
@@ -29,7 +112,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run actionlint via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/actionlint@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/actionlint@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -51,7 +134,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run pre-commit hooks + reviewdog diff
-        uses: leinardi/gha-pre-commit-reviewdog-actions/pre-commit-hooks@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/pre-commit-hooks@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -73,7 +156,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run markdownlint-cli2 via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/markdownlint-cli2@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/markdownlint-cli2@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -95,7 +178,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run mypy via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/mypy@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/mypy@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -117,7 +200,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run ruff via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/ruff@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/ruff@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -139,7 +222,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run shellcheck via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/shellcheck@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/shellcheck@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -161,7 +244,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run OpenTofu docs via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/tofu-docs@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/tofu-docs@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -183,7 +266,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run OpenTofu fmt via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/tofu-fmt@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/tofu-fmt@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -205,7 +288,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run OpenTofu tflint (JSON) via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/tofu-tflint@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/tofu-tflint@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -227,7 +310,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run Trivy (SARIF) for OpenTofu via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/tofu-trivy@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/tofu-trivy@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -249,7 +332,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run yamllint via pre-commit + reviewdog
-        uses: leinardi/gha-pre-commit-reviewdog-actions/yamllint@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/yamllint@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
@@ -271,7 +354,44 @@ jobs:
           fetch-depth: 0
 
       - name: Validate the commit messages
-        uses: leinardi/gha-pre-commit-reviewdog-actions/conventional-commits@68bf8e338b79df404181ceef655ae02f1c8edb8a # v1.0.2
+        uses: leinardi/gha-pre-commit-reviewdog-actions/conventional-commits@007919a45a04b0c52dfbb46732019dc4831fc03c # v1.0.3
         with:
           from-ref: ${{ github.event.pull_request.base.sha }}
           to-ref: ${{ github.event.pull_request.head.sha }}
+
+  # The one check a ruleset needs to require: GitHub counts a skipped required job as passing, so this
+  # job runs always and decides. On a pull request every needed job must succeed; on a push or a
+  # dispatch conventional-commits is skipped and pre-commit-all must succeed.
+  ci-result:
+    if: always()
+    needs:
+      - pre-commit-all
+      - conventional-commits
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check the needed jobs
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          failed="$(jq -r --arg event "${EVENT}" '
+            to_entries[]
+            | select(.value.result != "success")
+            | select(
+                (
+                  $event != "pull_request"
+                  and .key == "conventional-commits"
+                  and .value.result == "skipped"
+                ) | not
+              )
+            | "\(.key): \(.value.result)"
+          ' <<<"${NEEDS}")"
+          if [[ -n "${failed}" ]]; then
+            echo "::error::Needed jobs did not succeed:"
+            echo "${failed}"
+            exit 1
+          fi
+          echo "Every needed job succeeded."
