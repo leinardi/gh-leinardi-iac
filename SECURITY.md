@@ -25,7 +25,8 @@ that hands a pull request more permissions than it needs.
 ## Security model
 
 - Nothing in CI can change the account: no workflow runs `tofu plan` or `tofu apply`, and the CI
-  token is read-only except for posting review comments. Changes are applied locally by the owner,
+  token is read-only except for posting review comments and for deleting this repository's older
+  pre-commit caches (the warm-up's `actions: write`). Changes are applied locally by the owner,
   after reading the plan.
 - No credentials are committed. GitHub access comes from the GitHub CLI login; the state backend
   uses short-lived Cloudflare R2 credentials minted by `make login` from a Bitwarden item, and the
