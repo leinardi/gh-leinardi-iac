@@ -47,8 +47,9 @@ symlink to the root one, so the targets also work from the stack directory.
 | `modules/github-repo-stack/` | wrapper module: defaults plus the four modules below |
 | `modules/github-{repositories,labels,actions-variables,rulesets}/` | generic modules, one resource family each |
 | `scripts/r2_login.py`, `scripts/bw_fields.py` | `make login`: Bitwarden item to temporary R2 credentials |
-| `.github/workflows/ci.yaml` | the reviewdog jobs and `conventional-commits`, on pull requests |
-| `.github/workflows/pre-commit-warmup.yaml` | refreshes the pre-commit cache on `main` when the hook config changes |
+| `scripts/check-license-headers.sh` | the MIT license header check, run as a pre-commit hook |
+| `.github/workflows/ci.yaml` | `pre-commit-all` and `ci-result` on pull requests and pushes to `main`; the reviewdog jobs and `conventional-commits` on pull requests |
+| `.github/workflows/pre-commit-warmup.yaml` | refreshes the pre-commit cache on `main` when the hook config changes and weekly, pruning older entries |
 | `.agents/skills/` | project skills; `.claude/skills` is a symlink to it |
 
 ## Conventions
@@ -72,12 +73,41 @@ symlink to the root one, so the targets also work from the stack directory.
   never committed, not even in a test or an example.
 - `template` is read at creation only (`ignore_changes`), and `archive_on_destroy` archives a
   repository removed from the config instead of deleting it.
-- Module `README.md` files are generated between the `PRE-COMMIT-OPENTOFU DOCS HOOK` markers by the
-  `tofu_docs` hook: edit the variables' descriptions, not the generated tables.
+- **Every code file carries the MIT header**: `.tf`, shell and Python scripts, the Makefile and the
+  local `.mk` files, with the year of the file's first commit. Copy it from any `.tf` file (IntelliJ:
+  the MIT copyright profile). `scripts/check-license-headers.sh`, an always-run pre-commit hook,
+  fails on a governed file without it; the make-common files and the bootstrap script carry
+  make-common's own header and are exempt.
 - Pin every action and reusable workflow by full commit SHA, with the version in a trailing comment
   (`@<sha> # vX.Y.Z`); give every workflow a top-level `permissions: contents: read` and widen it
   only on the job that needs more; pass `${{ }}` expressions into `run:` scripts through `env:`;
   name workflow files `.yaml`.
+
+## Generated or vendored: never hand-edit
+
+- The module and stack `README.md` content between the `PRE-COMMIT-OPENTOFU DOCS HOOK` markers:
+  written by the `tofu_docs` hook (terraform-docs). Edit the variables' descriptions instead. Its
+  long lines are table rows, which markdownlint's line-length rule exempts.
+- `.terraform.lock.hcl`: written by `tofu init` (the `tofu_validate` hook runs it); change provider
+  versions in `versions.tf` and let `tofu init -upgrade` rewrite the lock file.
+- The make-common files, `.mk/{help,pre-commit,opentofu,password}.mk` (the Makefile's
+  `MK_COMMON_FILES`) and `scripts/bootstrap-mk-common.sh`: refreshed by `make mk-common-update`; a
+  change goes upstream to `leinardi/make-common` first.
+
+## Validation matrix
+
+Run before calling an edit done. `make check` (every hook over every file, the same run as CI's
+`pre-commit-all` job) applies to every row.
+
+| You edited | Run |
+| --- | --- |
+| `stacks/**`, `modules/**` | `make check`; `make tofu-plan` (needs `make login` and `gh auth login`), read every destroy, replace and label deletion |
+| `modules/*/variables.tf` | `make check` regenerates the module README; commit it with the change |
+| `scripts/*.py` | `make check` (ruff, mypy) |
+| `scripts/check-license-headers.sh` | `make check` (shellcheck and the hook itself); strip one governed file's header and confirm the check names it |
+| `.github/workflows/**` | `pre-commit run actionlint --all-files`; reason through each trigger: pull request, push, dispatch, schedule |
+| `.pre-commit-config.yaml`, `Makefile`, `.mk/login.mk` | `make check`, `make help` |
+| `*.md` | `make check` (markdownlint: prose wraps at 100 columns, tables, code and headings exempt) |
 
 ## Commit messages
 
