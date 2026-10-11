@@ -21,6 +21,7 @@
 | ---- | ------ | ------- |
 | <a name="module_repo_adversarial_review_loop"></a> [repo\_adversarial\_review\_loop](#module\_repo\_adversarial\_review\_loop) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_awtrix_controller"></a> [repo\_awtrix\_controller](#module\_repo\_awtrix\_controller) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_bitgauge"></a> [repo\_bitgauge](#module\_repo\_bitgauge) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_ddwrt_r7000"></a> [repo\_ddwrt\_r7000](#module\_repo\_ddwrt\_r7000) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_dotfiles"></a> [repo\_dotfiles](#module\_repo\_dotfiles) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gh_leinardi_iac"></a> [repo\_gh\_leinardi\_iac](#module\_repo\_gh\_leinardi\_iac) | ../../modules/github-repo-stack | n/a |

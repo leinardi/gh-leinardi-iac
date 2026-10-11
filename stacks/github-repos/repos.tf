@@ -55,6 +55,20 @@ module "repo_awtrix_controller" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_bitgauge" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "bitgauge"
+  description = "Self-hosted, browser-based network speed test for LAN, homelab and VPN links."
+  topics      = ["speedtest", "network", "bandwidth", "bufferbloat", "self-hosted", "homelab", "go", "vue"]
+  visibility  = "private"
+
+  auto_init        = false
+  license_template = null
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_ddwrt_r7000" {
   source = "../../modules/github-repo-stack"
 

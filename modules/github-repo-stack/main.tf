@@ -64,13 +64,24 @@ module "repo" {
   repos  = local.repo_map
 }
 
+# Right after creating a repository, GitHub seeds its default labels in the
+# background and answers writes with "403 Repository has been locked" until it
+# is done. The authoritative labels resource deletes those defaults, so a
+# creation intermittently failed on it and passed on retry. The wait runs once,
+# when this resource is created; later applies skip it.
+resource "time_sleep" "after_repo_create" {
+  create_duration = "5s"
+
+  depends_on = [module.repo]
+}
+
 module "labels" {
   source        = "../github-labels"
   repository    = var.repo_name
   labels        = local.labels
   authoritative = var.labels_authoritative
 
-  depends_on = [module.repo]
+  depends_on = [time_sleep.after_repo_create]
 }
 
 module "actions_variables" {
@@ -78,7 +89,7 @@ module "actions_variables" {
   repository = var.repo_name
   variables  = var.actions_variables
 
-  depends_on = [module.repo]
+  depends_on = [time_sleep.after_repo_create]
 }
 
 module "rulesets" {
@@ -91,5 +102,5 @@ module "rulesets" {
   default_branch_required_checks = var.default_branch_required_checks
   bypass_actors                  = var.default_branch_bypass_actors
 
-  depends_on = [module.repo]
+  depends_on = [time_sleep.after_repo_create]
 }
