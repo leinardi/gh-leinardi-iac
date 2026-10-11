@@ -100,6 +100,9 @@ user-facing contract a change must keep true.
   finding; so is a reason that only restates the check ID.
 - A fetched `.mk/*.mk` file edited by hand is lost on the next `make mk-common-update`; new targets
   go in a local `.mk/*.mk` listed in `MK_LOCAL_FILES`.
+- A new `.tf`, shell or Python script, Makefile or local `.mk` file carries the MIT header with the
+  year of its first commit (`scripts/check-license-headers.sh`); the make-common files and
+  `scripts/bootstrap-mk-common.sh` keep make-common's own header and are exempt.
 
 ### Workflows
 
@@ -127,6 +130,21 @@ user-facing contract a change must keep true.
   template repository, a value that is `null` versus omitted.
 - **Contract drift:** README, `AGENTS.md`, `SECURITY.md` and the module READMEs still describe what
   the configuration does.
+- **Commit type matches what applying it changes:** this repository has no releases, so no tag or
+  version derives from the types; the history is the changelog, and every commit lands on `main` as
+  it is (merge commits). The type must say what changes on GitHub once the commit is applied
+  (`AGENTS.md`): `feat` for a newly managed repository or setting, `fix` for a correction,
+  `refactor` for a change whose plan is empty, `docs`, `chore` or `ci` when nothing applied
+  changes. A commit whose plan changes the account, typed `chore`, `docs`, `ci` or `refactor`,
+  hides a live change from the history: a finding. So is a `feat` or `fix` on a commit whose plan is
+  empty (CI, docs, lint configuration, comments), and a `!` or `BREAKING CHANGE:` footer that the
+  commit does not explain.
+- **A check that can no longer fail:** `scripts/check-license-headers.sh`, the `ci-result` job and
+  the `pre-commit-all` step that fails on a modified file guard claims nothing else checks. Break
+  the guarded thing once (strip the header from a `.tf` file, let a needed job be skipped or
+  cancelled, make a hook rewrite a file) and see whether the check still fails. One that passes
+  because its file list is empty, its `case` pattern no longer matches anything, a job it should
+  judge is missing from `needs`, or a tool was never installed is a false pass: a finding.
 
 For each candidate finding, trace it to the plan or the code that proves it. If that confirms it,
 report it. If not, dig once more; if it is still unconfirmed, drop it. No named input and wrong
@@ -139,6 +157,7 @@ result, no finding.
 | anything | `make check` (tofu fmt, validate, docs, tflint, trivy, ruff, mypy, actionlint, markdownlint, …) |
 | `stacks/` or `modules/` | `make tofu-plan` if credentials are available (`make login`, `gh auth login`), and read every destroy, replace and label deletion in it |
 | a workflow | `make check` (actionlint), then reason through each trigger it has: pull request, push, dispatch |
+| `scripts/check-license-headers.sh` | run it, then strip one governed file's header and confirm the check names that file |
 
 Never run `make tofu-apply`, or `tofu apply`, `destroy`, `import` or `state` through
 `make tofu-command`, to verify a change: they change the live account. If no plan could be produced,
