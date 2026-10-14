@@ -317,19 +317,6 @@ module "repo_monmux" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
-module "repo_opencode_swap" {
-  source = "../../modules/github-repo-stack"
-
-  repo_name   = "opencode-swap"
-  description = "Multi-account switcher for OpenCode: securely store several provider accounts and atomically swap the one OpenCode treats as active."
-  topics      = ["opencode", "openai", "account-switcher", "cli", "python", "credentials"]
-
-  # Gate merges on the CI job that runs `make verify` (.github/workflows/ci.yml).
-  default_branch_required_checks = ["verify"]
-
-  enable_rulesets_on_private = var.enable_rulesets_on_private
-}
-
 module "repo_pointerparity" {
   source = "../../modules/github-repo-stack"
 
