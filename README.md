@@ -2,32 +2,34 @@
 
 This repository manages my GitHub account infrastructure using **OpenTofu**.
 
-The goal is to treat GitHub configuration (repositories, settings, labels, rulesets, etc.) as **infrastructure as code**, so it stays:
+The goal is to treat GitHub configuration (repositories, settings, labels, rulesets, etc.) as
+**infrastructure as code**, so it stays:
 
 - reproducible
 - auditable
 - version-controlled
 - easy to evolve over time
 
-The repository is intentionally public and opinionated, but the patterns used here are generic and can be reused for other personal or organizational GitHub setups.
+The repository is intentionally public and opinionated, but the patterns used here are generic and
+can be reused for other personal or organizational GitHub setups.
 
 ## 📦 What this repository manages
 
 At the moment, this repository manages:
 
 - GitHub repositories
-    - creation (including template-based creation)
-    - visibility
-    - merge strategy settings
-    - topics
-    - basic repo settings (issues/wiki/projects, etc.)
-    - archival behavior
+  - creation (including template-based creation)
+  - visibility
+  - merge strategy settings
+  - topics
+  - basic repo settings (issues/wiki/projects, etc.)
+  - archival behavior
 - Repository templates (used at creation time)
 - Issue labels (authoritative sync)
 - GitHub Actions variables (repository level, additive)
 - Repository rulesets
-    - default branch protection
-    - immutable tags
+  - default branch protection
+  - immutable tags
 
 The scope may grow over time as more GitHub features are managed declaratively.
 
@@ -66,12 +68,13 @@ Contains reusable OpenTofu modules:
 
 - **`github-repo-stack/`** is a wrapper module with sensible defaults that composes:
 
-    - `github-repositories/`
-    - `github-labels/`
-    - `github-actions-variables/`
-    - `github-rulesets/`
+  - `github-repositories/`
+  - `github-labels/`
+  - `github-actions-variables/`
+  - `github-rulesets/`
 
-This keeps the stack configuration readable and reduces “blast radius”: each repo is managed by its own module call.
+This keeps the stack configuration readable and reduces “blast radius”: each repo is managed by its
+own module call.
 
 ### `stacks/github-repos/`
 
@@ -91,7 +94,8 @@ Templates are used when creating new repositories:
 - default template for general repos
 - specialized templates (e.g. GitHub Action templates)
 
-Important: templates are only applied **at creation time**, as per GitHub behavior. The configuration ignores future drift on the `template` block so plans stay stable.
+Important: templates are only applied **at creation time**, as per GitHub behavior. The
+configuration ignores future drift on the `template` block so plans stay stable.
 
 ## 🛡️ Rulesets and feature availability
 
@@ -108,11 +112,12 @@ This is controlled through the wrapper module via:
 
 ## 🔐 Authentication model
 
-Changes are planned and applied locally; CI only lints the configuration and never runs `tofu plan` or `tofu apply`.
+Changes are planned and applied locally; CI only lints the configuration and never runs `tofu plan`
+or `tofu apply`.
 
 - **GitHub**: authentication is handled via the GitHub CLI (`gh auth login`)
-- **State backend**: `make login` mints temporary Cloudflare R2 credentials from a Bitwarden item into the
-  `r2-gh-leinardi-iac` AWS profile, which every `tofu-*` target uses
+- **State backend**: `make login` mints temporary Cloudflare R2 credentials from a Bitwarden item
+  into the `r2-gh-leinardi-iac` AWS profile, which every `tofu-*` target uses
 
 No access tokens are committed to the repository.
 
@@ -184,7 +189,8 @@ make tofu-apply
 
 ## ➕ Managing repositories
 
-Repositories are declared one-by-one in `stacks/github-repos/repos.tf` using the wrapper module `github-repo-stack`.
+Repositories are declared one-by-one in `stacks/github-repos/repos.tf` using the wrapper module
+`github-repo-stack`.
 
 ### Create a new repository (without a template)
 
@@ -259,7 +265,8 @@ Secrets must never be committed here.
 
 ### Import an existing repository
 
-1. Add a module block for the repo (typically set `template = null` unless you created it from a template):
+1. Add a module block for the repo (typically set `template = null` unless you created it from a
+   template):
 
 ```hcl
 module "repo_existing_repo" {
@@ -284,7 +291,8 @@ make tofu-plan
 make tofu-apply
 ```
 
-If you already have labels or rulesets on that repo, the next plan will reconcile them to match the configuration (labels are authoritative by default).
+If you already have labels or rulesets on that repo, the next plan will reconcile them to match the
+configuration (labels are authoritative by default).
 
 ## 🧰 Maintenance helpers
 
@@ -310,6 +318,7 @@ If you already have labels or rulesets on that repo, the next plan will reconcil
 
 ## 🤝 Commits and security
 
-Commits follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with a scope, checked by the `commit-msg`
-hook that `make pre-commit-install` installs and by CI on every pull request; [`AGENTS.md`](AGENTS.md) has the rules. To report a
-vulnerability, see [`SECURITY.md`](SECURITY.md).
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with a scope,
+checked by the `commit-msg` hook that `make pre-commit-install` installs and by CI on every pull
+request; [`AGENTS.md`](AGENTS.md) has the rules. To report a vulnerability, see
+[`SECURITY.md`](SECURITY.md).
