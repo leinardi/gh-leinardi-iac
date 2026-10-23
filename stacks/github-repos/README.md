@@ -29,6 +29,7 @@
 | <a name="module_repo_gha_pre_commit_reviewdog_actions"></a> [repo\_gha\_pre\_commit\_reviewdog\_actions](#module\_repo\_gha\_pre\_commit\_reviewdog\_actions) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gnome_shell_extension_monmux"></a> [repo\_gnome\_shell\_extension\_monmux](#module\_repo\_gnome\_shell\_extension\_monmux) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gotilert"></a> [repo\_gotilert](#module\_repo\_gotilert) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_herdquay"></a> [repo\_herdquay](#module\_repo\_herdquay) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_homebrew_tap"></a> [repo\_homebrew\_tap](#module\_repo\_homebrew\_tap) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_homelab"></a> [repo\_homelab](#module\_repo\_homelab) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_jdinstaller"></a> [repo\_jdinstaller](#module\_repo\_jdinstaller) | ../../modules/github-repo-stack | n/a |
