@@ -209,6 +209,18 @@ module "repo_gotilert" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_herdquay" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "herdquay"
+  description = "Persistent, remotely accessible AI coding environment for the homelab: Herdr, Claude Code and SSH in a hardened Docker image."
+  topics      = ["docker", "docker-hardened-images", "claude-code", "herdr", "ssh", "homelab", "dev-environment"]
+  visibility  = "private"
+  template    = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_homebrew_tap" {
   source = "../../modules/github-repo-stack"
 
