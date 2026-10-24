@@ -218,6 +218,8 @@ module "repo_herdquay" {
   visibility  = "private"
   template    = local.default_template
 
+  default_branch_required_checks = ["ci-result"]
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
