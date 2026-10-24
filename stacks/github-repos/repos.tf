@@ -215,7 +215,6 @@ module "repo_herdquay" {
   repo_name   = "herdquay"
   description = "Persistent, remotely accessible AI coding environment for the homelab: Herdr, Claude Code, opencode and SSH in one unprivileged Docker image."
   topics      = ["docker", "claude-code", "opencode", "herdr", "ssh", "homelab", "dev-environment"]
-  visibility  = "private"
   template    = local.default_template
 
   default_branch_required_checks = ["ci-result"]
