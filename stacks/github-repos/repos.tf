@@ -213,10 +213,12 @@ module "repo_herdquay" {
   source = "../../modules/github-repo-stack"
 
   repo_name   = "herdquay"
-  description = "Persistent, remotely accessible AI coding environment for the homelab: Herdr, Claude Code and SSH in a hardened Docker image."
-  topics      = ["docker", "docker-hardened-images", "claude-code", "herdr", "ssh", "homelab", "dev-environment"]
+  description = "Persistent, remotely accessible AI coding environment for the homelab: Herdr, Claude Code, opencode and SSH in one unprivileged Docker image."
+  topics      = ["docker", "claude-code", "opencode", "herdr", "ssh", "homelab", "dev-environment"]
   visibility  = "private"
   template    = local.default_template
+
+  default_branch_required_checks = ["ci-result"]
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
