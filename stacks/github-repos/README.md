@@ -41,6 +41,7 @@
 | <a name="module_repo_runhold"></a> [repo\_runhold](#module\_repo\_runhold) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_snapmaker_u1"></a> [repo\_snapmaker\_u1](#module\_repo\_snapmaker\_u1) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_swarm_device_access"></a> [repo\_swarm\_device\_access](#module\_repo\_swarm\_device\_access) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_swarm_rootless_docker"></a> [repo\_swarm\_rootless\_docker](#module\_repo\_swarm\_rootless\_docker) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_swarm_scheduler_exporter"></a> [repo\_swarm\_scheduler\_exporter](#module\_repo\_swarm\_scheduler\_exporter) | ../../modules/github-repo-stack | n/a |
 | <a name="module_template_default_labels_wipe"></a> [template\_default\_labels\_wipe](#module\_template\_default\_labels\_wipe) | ../../modules/github-labels | n/a |
 
