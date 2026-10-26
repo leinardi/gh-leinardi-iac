@@ -370,6 +370,15 @@ module "repo_swarm_rootless_docker" {
 
   default_branch_required_checks = ["ci-result"]
 
+  # release.yaml's release job pushes the tag and the images with the
+  # environment's secrets. The release is unattended (daily schedule, no
+  # reviewers), so the environment's one rule is that only main may deploy to
+  # it: the workflow's own guard job is the first line, this the one a changed
+  # workflow on another branch cannot remove.
+  environments = {
+    release = { deployment_branches = ["main"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 

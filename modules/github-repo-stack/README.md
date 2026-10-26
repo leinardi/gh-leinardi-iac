@@ -21,6 +21,7 @@
 | Name | Source | Version |
 | ---- | ------ | ------- |
 | <a name="module_actions_variables"></a> [actions\_variables](#module\_actions\_variables) | ../github-actions-variables | n/a |
+| <a name="module_environments"></a> [environments](#module\_environments) | ../github-environments | n/a |
 | <a name="module_labels"></a> [labels](#module\_labels) | ../github-labels | n/a |
 | <a name="module_repo"></a> [repo](#module\_repo) | ../github-repositories | n/a |
 | <a name="module_rulesets"></a> [rulesets](#module\_rulesets) | ../github-rulesets | n/a |
@@ -50,6 +51,7 @@
 | <a name="input_delete_branch_on_merge"></a> [delete\_branch\_on\_merge](#input\_delete\_branch\_on\_merge) | n/a | `bool` | `true` | no |
 | <a name="input_description"></a> [description](#input\_description) | n/a | `string` | `null` | no |
 | <a name="input_enable_rulesets_on_private"></a> [enable\_rulesets\_on\_private](#input\_enable\_rulesets\_on\_private) | If false, rulesets only for public repos (GitHub Free limitation). | `bool` | `false` | no |
+| <a name="input_environments"></a> [environments](#input\_environments) | Deployment environments (name -> settings), passed to github-environments,<br/>whose README documents each setting. An environment a workflow job names is<br/>created by GitHub on first use with no rules; declaring it here gives it its<br/>rules, e.g. a release environment only main may deploy to:<br/><br/>    environments = {<br/>      release = { deployment\_branches = ["main"] }<br/>    } | <pre>map(object({<br/>    deployment_branches = optional(list(string), [])<br/>    deployment_tags     = optional(list(string), [])<br/>    protected_branches  = optional(bool, false)<br/>    reviewer_users      = optional(list(number), [])<br/>    reviewer_teams      = optional(list(number), [])<br/>    prevent_self_review = optional(bool, false)<br/>    wait_timer          = optional(number, 0)<br/>    can_admins_bypass   = optional(bool, false)<br/>  }))</pre> | `{}` | no |
 | <a name="input_has_issues"></a> [has\_issues](#input\_has\_issues) | n/a | `bool` | `true` | no |
 | <a name="input_has_projects"></a> [has\_projects](#input\_has\_projects) | n/a | `bool` | `false` | no |
 | <a name="input_has_wiki"></a> [has\_wiki](#input\_has\_wiki) | n/a | `bool` | `false` | no |

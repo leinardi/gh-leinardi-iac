@@ -92,6 +92,14 @@ module "actions_variables" {
   depends_on = [time_sleep.after_repo_create]
 }
 
+module "environments" {
+  source       = "../github-environments"
+  repository   = var.repo_name
+  environments = var.environments
+
+  depends_on = [time_sleep.after_repo_create]
+}
+
 module "rulesets" {
   source = "../github-rulesets"
 
