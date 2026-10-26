@@ -43,7 +43,7 @@ jobs:
       - name: Set up OpenTofu
         uses: opentofu/setup-opentofu@a1320f892987e89d278cc92dc5adc984fb93aca4 # v2.0.2
         with:
-          tofu_version: 1.12.6
+          tofu_version: 1.13.2
           # The wrapper rewrites tofu's output and exit handling for later steps; the hooks need
           # the plain binary.
           tofu_wrapper: false
@@ -51,12 +51,12 @@ jobs:
       - name: Set up TFLint
         uses: terraform-linters/setup-tflint@6ffdbaa3be476b3431f7275c26966ef32ff60337 # v6.3.2
         with:
-          tflint_version: v0.64.0
+          tflint_version: v0.65.0
 
       - name: Set up Trivy
         uses: aquasecurity/setup-trivy@81e514348e19b6112ce2a7e3ecbafe19c1e1f567 # v0.3.1
         with:
-          version: v0.75.0
+          version: v0.76.1
 
       # The digest is the release asset's, from
       # gh api repos/terraform-docs/terraform-docs/releases/tags/<version>.
