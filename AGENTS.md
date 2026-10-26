@@ -44,8 +44,8 @@ symlink to the root one, so the targets also work from the stack directory.
 | `stacks/github-repos/defaults.tf` | `local.repo_defaults`, the settings every repository starts from |
 | `stacks/github-repos/moved.tf` | `moved` blocks for renames still to be applied |
 | `stacks/github-repos/.trivyignore` | accepted Trivy findings for the stack, each with a reason |
-| `modules/github-repo-stack/` | wrapper module: defaults plus the four modules below |
-| `modules/github-{repositories,labels,actions-variables,rulesets}/` | generic modules, one resource family each |
+| `modules/github-repo-stack/` | wrapper module: defaults plus the five modules below |
+| `modules/github-{repositories,labels,actions-variables,environments,rulesets}/` | generic modules, one resource family each |
 | `scripts/r2_login.py`, `scripts/bw_fields.py` | `make login`: Bitwarden item to temporary R2 credentials |
 | `scripts/check-license-headers.sh` | the MIT license header check, run as a pre-commit hook |
 | `.github/workflows/ci.yaml` | `pre-commit-all` and `ci-result` on pull requests and pushes to `main`; the reviewdog jobs and `conventional-commits` on pull requests |

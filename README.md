@@ -27,6 +27,7 @@ At the moment, this repository manages:
 - Repository templates (used at creation time)
 - Issue labels (authoritative sync)
 - GitHub Actions variables (repository level, additive)
+- Deployment environments (branch and tag policies, reviewers, wait timer)
 - Repository rulesets
   - default branch protection
   - immutable tags
@@ -41,8 +42,9 @@ The scope may grow over time as more GitHub features are managed declaratively.
 │   ├── github-repositories/      # Generic module: manages github_repository resources
 │   ├── github-labels/            # Generic module: manages issue labels (authoritative or additive)
 │   ├── github-actions-variables/ # Generic module: manages repo-level Actions variables
+│   ├── github-environments/      # Generic module: manages deployment environments and their policies
 │   ├── github-rulesets/          # Generic module: manages rulesets (branch + tag)
-│   └── github-repo-stack/        # Wrapper module: sensible defaults + composes the 4 modules above
+│   └── github-repo-stack/        # Wrapper module: sensible defaults + composes the 5 modules above
 │
 ├── stacks/
 │   └── github-repos/              # Concrete GitHub account configuration
@@ -71,6 +73,7 @@ Contains reusable OpenTofu modules:
   - `github-repositories/`
   - `github-labels/`
   - `github-actions-variables/`
+  - `github-environments/`
   - `github-rulesets/`
 
 This keeps the stack configuration readable and reduces “blast radius”: each repo is managed by its
@@ -262,6 +265,31 @@ an entry here deletes only that variable.
 
 ⚠️ This repository is public: `actions_variables` is for non-sensitive values only.
 Secrets must never be committed here.
+
+### Manage deployment environments
+
+A workflow job that names an `environment:` gets it created by GitHub on first use, with no rules.
+Declare it on the repo's module block via `environments` to give it rules. The most common one
+limits which refs may deploy, so a release job holding write permissions and the environment's
+secrets never runs from another branch, while the release stays unattended:
+
+```hcl
+module "repo_new_repo" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name = "new-repo"
+
+  environments = {
+    release = { deployment_branches = ["main"] }
+  }
+}
+```
+
+Every setting is optional: `deployment_branches` and `deployment_tags` (name patterns), or
+`protected_branches`; `reviewer_users` and `reviewer_teams` (numeric IDs) with
+`prevent_self_review`; `wait_timer` (minutes); and `can_admins_bypass`, which defaults to `false`
+so the rules hold for admins too. `modules/github-environments/README.md` documents each one. An
+environment removed from the map is deleted, with its secrets.
 
 ### Import an existing repository
 

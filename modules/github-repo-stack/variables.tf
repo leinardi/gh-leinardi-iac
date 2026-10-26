@@ -253,6 +253,30 @@ heredoc. Never put secrets here: this configuration is public.
 EOT
 }
 
+variable "environments" {
+  type = map(object({
+    deployment_branches = optional(list(string), [])
+    deployment_tags     = optional(list(string), [])
+    protected_branches  = optional(bool, false)
+    reviewer_users      = optional(list(number), [])
+    reviewer_teams      = optional(list(number), [])
+    prevent_self_review = optional(bool, false)
+    wait_timer          = optional(number, 0)
+    can_admins_bypass   = optional(bool, false)
+  }))
+  default     = {}
+  description = <<EOT
+Deployment environments (name -> settings), passed to github-environments,
+whose README documents each setting. An environment a workflow job names is
+created by GitHub on first use with no rules; declaring it here gives it its
+rules, e.g. a release environment only main may deploy to:
+
+    environments = {
+      release = { deployment_branches = ["main"] }
+    }
+EOT
+}
+
 # Repo defaults
 variable "allow_auto_merge" {
   # Keep parity with your github-repositories module default:

@@ -360,6 +360,28 @@ module "repo_swarm_device_access" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_swarm_rootless_docker" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "swarm-rootless-docker"
+  description = "Dedicated rootless Docker daemon per Docker Swarm service: an unprivileged launcher creates and supervises a rootless dockerd container next to its consumer, without ever exposing the host's Docker daemon."
+  topics      = ["docker-swarm", "rootless-docker", "docker-in-docker", "rust", "homelab"]
+  template    = local.default_template
+
+  default_branch_required_checks = ["ci-result"]
+
+  # release.yaml's release job pushes the tag and the images with the
+  # environment's secrets. The release is unattended (daily schedule, no
+  # reviewers), so the environment's one rule is that only main may deploy to
+  # it: the workflow's own guard job is the first line, this the one a changed
+  # workflow on another branch cannot remove.
+  environments = {
+    release = { deployment_branches = ["main"] }
+  }
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_swarm_scheduler_exporter" {
   source = "../../modules/github-repo-stack"
 
