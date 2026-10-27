@@ -215,11 +215,15 @@ module "repo_gtk_rs_skills" {
   repo_name   = "gtk-rs-skills"
   description = "Agent skills and reference docs for building modern GTK 4 + libadwaita apps in Rust with gtk-rs: development guide, project scaffolding and code review."
   topics      = ["gtk", "gtk4", "gtk-rs", "libadwaita", "gnome", "rust", "claude-code", "claude-code-plugin", "agent-skills"]
-  visibility  = "private"
 
   # Created empty: the existing local tree (with its own LICENSE) is pushed as the first commit.
   auto_init        = false
   license_template = null
+
+  # ci-result (.github/workflows/ci.yaml) runs on pull_request, push and workflow_dispatch with
+  # `if: always()`, so it reports on every run, including the dispatch release.yaml fires at its
+  # GITHUB_TOKEN-authored bump PR. The reviewdog jobs are pull_request-only and must not be required.
+  default_branch_required_checks = ["ci-result"]
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
