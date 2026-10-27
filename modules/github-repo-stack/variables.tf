@@ -253,6 +253,16 @@ heredoc. Never put secrets here: this configuration is public.
 EOT
 }
 
+variable "actions_can_create_pull_requests" {
+  type        = bool
+  default     = null
+  description = <<EOT
+Whether GitHub Actions may create and approve pull requests (Settings -> Actions
+-> General -> Workflow permissions). Setting it also manages the GITHUB_TOKEN
+default permission, kept at read. null leaves both settings unmanaged.
+EOT
+}
+
 variable "environments" {
   type = map(object({
     deployment_branches = optional(list(string), [])
