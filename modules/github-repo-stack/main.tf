@@ -112,3 +112,13 @@ module "rulesets" {
 
   depends_on = [time_sleep.after_repo_create]
 }
+
+resource "github_workflow_repository_permissions" "this" {
+  count = var.actions_can_create_pull_requests == null ? 0 : 1
+
+  repository                       = var.repo_name
+  default_workflow_permissions     = "read"
+  can_approve_pull_request_reviews = var.actions_can_create_pull_requests
+
+  depends_on = [time_sleep.after_repo_create]
+}

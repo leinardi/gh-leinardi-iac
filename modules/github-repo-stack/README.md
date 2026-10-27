@@ -14,6 +14,7 @@
 
 | Name | Version |
 | ---- | ------- |
+| <a name="provider_github"></a> [github](#provider\_github) | 6.11.1 |
 | <a name="provider_time"></a> [time](#provider\_time) | 0.14.2 |
 
 ## Modules
@@ -30,12 +31,14 @@
 
 | Name | Type |
 | ---- | ---- |
+| [github_workflow_repository_permissions.this](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/workflow_repository_permissions) | resource |
 | [time_sleep.after_repo_create](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_actions_can_create_pull_requests"></a> [actions\_can\_create\_pull\_requests](#input\_actions\_can\_create\_pull\_requests) | Whether GitHub Actions may create and approve pull requests (Settings -> Actions<br/>-> General -> Workflow permissions). Setting it also manages the GITHUB\_TOKEN<br/>default permission, kept at read. null leaves both settings unmanaged. | `bool` | `null` | no |
 | <a name="input_actions_variables"></a> [actions\_variables](#input\_actions\_variables) | Repository-level GitHub Actions variables (name -> value).<br/><br/>Names are normalized to uppercase. Multiline values are supported via HCL<br/>heredoc. Never put secrets here: this configuration is public. | `map(string)` | `{}` | no |
 | <a name="input_allow_auto_merge"></a> [allow\_auto\_merge](#input\_allow\_auto\_merge) | Repo defaults | `bool` | `null` | no |
 | <a name="input_allow_merge_commit"></a> [allow\_merge\_commit](#input\_allow\_merge\_commit) | n/a | `bool` | `true` | no |

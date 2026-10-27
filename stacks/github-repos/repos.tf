@@ -44,6 +44,9 @@ module "repo_adversarial_review_loop" {
   # one of them would leave every release PR permanently unmergeable.
   default_branch_required_checks = ["test"]
 
+  # release.yaml opens its version-bump pull request with GITHUB_TOKEN.
+  actions_can_create_pull_requests = true
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -224,6 +227,9 @@ module "repo_gtk_rs_skills" {
   # `if: always()`, so it reports on every run, including the dispatch release.yaml fires at its
   # GITHUB_TOKEN-authored bump PR. The reviewdog jobs are pull_request-only and must not be required.
   default_branch_required_checks = ["ci-result"]
+
+  # release.yaml opens its version-bump pull request with GITHUB_TOKEN.
+  actions_can_create_pull_requests = true
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
