@@ -209,6 +209,21 @@ module "repo_gotilert" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_gtk_rs_skills" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gtk-rs-skills"
+  description = "Agent skills and reference docs for building modern GTK 4 + libadwaita apps in Rust with gtk-rs: development guide, project scaffolding and code review."
+  topics      = ["gtk", "gtk4", "gtk-rs", "libadwaita", "gnome", "rust", "claude-code", "claude-code-plugin", "agent-skills"]
+  visibility  = "private"
+
+  # Created empty: the existing local tree (with its own LICENSE) is pushed as the first commit.
+  auto_init        = false
+  license_template = null
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_herdquay" {
   source = "../../modules/github-repo-stack"
 
