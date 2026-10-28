@@ -30,6 +30,7 @@
 | <a name="module_repo_gnome_shell_extension_monmux"></a> [repo\_gnome\_shell\_extension\_monmux](#module\_repo\_gnome\_shell\_extension\_monmux) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gotilert"></a> [repo\_gotilert](#module\_repo\_gotilert) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gtk_rs_skills"></a> [repo\_gtk\_rs\_skills](#module\_repo\_gtk\_rs\_skills) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gx52"></a> [repo\_gx52](#module\_repo\_gx52) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_herdquay"></a> [repo\_herdquay](#module\_repo\_herdquay) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_homebrew_tap"></a> [repo\_homebrew\_tap](#module\_repo\_homebrew\_tap) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_homelab"></a> [repo\_homelab](#module\_repo\_homelab) | ../../modules/github-repo-stack | n/a |
