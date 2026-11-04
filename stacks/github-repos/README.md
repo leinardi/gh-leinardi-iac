@@ -41,6 +41,7 @@
 | <a name="module_repo_monmux"></a> [repo\_monmux](#module\_repo\_monmux) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_pointerparity"></a> [repo\_pointerparity](#module\_repo\_pointerparity) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_runhold"></a> [repo\_runhold](#module\_repo\_runhold) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_rust_common"></a> [repo\_rust\_common](#module\_repo\_rust\_common) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_snapmaker_u1"></a> [repo\_snapmaker\_u1](#module\_repo\_snapmaker\_u1) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_swarm_device_access"></a> [repo\_swarm\_device\_access](#module\_repo\_swarm\_device\_access) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_swarm_rootless_docker"></a> [repo\_swarm\_rootless\_docker](#module\_repo\_swarm\_rootless\_docker) | ../../modules/github-repo-stack | n/a |
