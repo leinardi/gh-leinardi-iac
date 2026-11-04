@@ -234,6 +234,21 @@ module "repo_gtk_rs_skills" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_gx52" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gx52"
+  description = "Control the LEDs and MFD of the Logitech (Saitek) X52 and X52 Pro H.O.T.A.S. on Linux."
+  topics      = ["x52", "x52-pro", "hotas", "joystick", "saitek", "logitech", "flight-simulator", "linux", "gtk", "flatpak", "flathub"]
+
+  # Imported: the repository already exists, was formerly a mirror of gitlab.com/leinardi/gx52, and
+  # is licensed GPL-3.0-or-later.
+  auto_init        = false
+  license_template = null
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_herdquay" {
   source = "../../modules/github-repo-stack"
 
