@@ -392,6 +392,9 @@ module "repo_rust_common" {
   # reports on every run. The lint jobs that only run on pull requests are not required.
   default_branch_required_checks = ["ci-result"]
 
+  # release.yaml opens its version-bump pull request with GITHUB_TOKEN.
+  actions_can_create_pull_requests = true
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
