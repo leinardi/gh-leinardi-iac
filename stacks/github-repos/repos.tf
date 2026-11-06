@@ -387,6 +387,11 @@ module "repo_rust_common" {
   topics      = ["rust", "cargo-workspace", "shared-library", "homelab"]
   template    = local.default_template
 
+  # ci-result (.github/workflows/ci.yaml) runs on pull_request, push and workflow_dispatch with
+  # `if: always()` and needs pre-commit-all, conventional-commits, rust and feature-matrix, so it
+  # reports on every run. The lint jobs that only run on pull requests are not required.
+  default_branch_required_checks = ["ci-result"]
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
