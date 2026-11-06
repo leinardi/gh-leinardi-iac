@@ -379,6 +379,17 @@ module "repo_pointerparity" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_rust_common" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "rust-common"
+  description = "Shared Rust crates for the leinardi projects: Go-compatible helpers, Prometheus text exposition, HTTP server plumbing, test environment helpers and repository meta checks."
+  topics      = ["rust", "cargo-workspace", "shared-library", "homelab"]
+  template    = local.default_template
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_snapmaker_u1" {
   source = "../../modules/github-repo-stack"
 
