@@ -24,6 +24,7 @@
 | <a name="module_repo_bitgauge"></a> [repo\_bitgauge](#module\_repo\_bitgauge) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_ddwrt_r7000"></a> [repo\_ddwrt\_r7000](#module\_repo\_ddwrt\_r7000) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_dotfiles"></a> [repo\_dotfiles](#module\_repo\_dotfiles) | ../../modules/github-repo-stack | n/a |
+| <a name="module_repo_gh_composite_actions"></a> [repo\_gh\_composite\_actions](#module\_repo\_gh\_composite\_actions) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gh_leinardi_iac"></a> [repo\_gh\_leinardi\_iac](#module\_repo\_gh\_leinardi\_iac) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gh_reusable_workflows"></a> [repo\_gh\_reusable\_workflows](#module\_repo\_gh\_reusable\_workflows) | ../../modules/github-repo-stack | n/a |
 | <a name="module_repo_gha_pre_commit_reviewdog_actions"></a> [repo\_gha\_pre\_commit\_reviewdog\_actions](#module\_repo\_gha\_pre\_commit\_reviewdog\_actions) | ../../modules/github-repo-stack | n/a |
