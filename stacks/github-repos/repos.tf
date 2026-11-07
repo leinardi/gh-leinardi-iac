@@ -101,6 +101,21 @@ module "repo_dotfiles" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_gh_composite_actions" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "gh-composite-actions"
+  description = "Shared GitHub composite actions for the leinardi repositories: tool setup, release versioning, CI-green gates, image scanning, toolchain records and cache pruning."
+  topics      = ["github-actions", "composite-actions", "ci", "release-automation"]
+  template    = local.default_template
+
+  # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
+  # succeeded, so it is the only check to require.
+  default_branch_required_checks = ["ci-result"]
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_gh_leinardi_iac" {
   source = "../../modules/github-repo-stack"
 
