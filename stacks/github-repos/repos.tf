@@ -63,11 +63,29 @@ module "repo_bitgauge" {
 
   repo_name   = "bitgauge"
   description = "Self-hosted, browser-based network speed test for LAN, homelab and VPN links."
-  topics      = ["speedtest", "network", "bandwidth", "bufferbloat", "self-hosted", "homelab", "go", "vue"]
-  visibility  = "private"
+  topics      = ["speedtest", "network", "bandwidth", "bufferbloat", "self-hosted", "homelab", "rust", "vue"]
 
   auto_init        = false
   license_template = null
+
+  # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
+  # succeeded, so it is the only check to require. The reviewdog annotation jobs stay outside it.
+  default_branch_required_checks = ["ci-result"]
+
+  # release.yaml's release job reads the dhi.io credentials, pushes the tag and publishes the
+  # image from this environment. The release is dispatched by hand with no reviewers, so its one
+  # rule is that only main may deploy to it: the workflow's guard job is the first line, this the
+  # one a changed workflow on another branch cannot remove.
+  environments = {
+    release = { deployment_branches = ["main"] }
+  }
+
+  # The dhi.io pull-only account, read as vars.DHI_USERNAME by CI's trusted image jobs and the
+  # release job. Not a secret; the DHI_TOKEN secrets (Actions, release environment, Dependabot)
+  # are set by hand (bitgauge docs/release.md, One-Time Setup).
+  actions_variables = {
+    DHI_USERNAME = "leinardi"
+  }
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
