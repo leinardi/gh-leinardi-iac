@@ -57,6 +57,12 @@ locals {
   supports_rulesets = (
     var.visibility == "public" || var.enable_rulesets_on_private
   )
+
+  private_vulnerability_reporting = (
+    var.private_vulnerability_reporting != null
+    ? var.private_vulnerability_reporting
+    : (var.visibility == "public" ? true : null)
+  )
 }
 
 module "repo" {
@@ -119,6 +125,36 @@ resource "github_workflow_repository_permissions" "this" {
   repository                       = var.repo_name
   default_workflow_permissions     = "read"
   can_approve_pull_request_reviews = var.actions_can_create_pull_requests
+
+  depends_on = [time_sleep.after_repo_create]
+}
+
+# Private vulnerability reporting, set through the REST API because the provider has no resource
+# or argument for it yet: integrations/terraform-provider-github#2399 (the request) and #2969 (the
+# pull request adding it). Once #2969 is released and #2399 closed, replace this with the
+# provider's setting, and the one for template-default in stacks/github-repos/repos-templates.tf,
+# and drop the full_names output of github-repositories if nothing else reads it.
+#
+# The call runs when the resource is created, and again whenever the repository or the wanted
+# state changes (a replace): PUT turns reporting on, DELETE off. It does not detect a change made
+# in the GitHub UI; `tofu apply -replace` on this resource re-applies the wanted state. gh
+# authenticates as the provider does locally (gh auth login, or GITHUB_TOKEN).
+resource "terraform_data" "private_vulnerability_reporting" {
+  count = local.private_vulnerability_reporting == null ? 0 : 1
+
+  triggers_replace = {
+    repository = var.repo_name
+    enabled    = local.private_vulnerability_reporting
+  }
+
+  provisioner "local-exec" {
+    # Retried: with parallel calls GitHub now and then answers with an empty error body.
+    command = "for try in 1 2 3; do gh api --method \"$METHOD\" \"repos/$FULL_NAME/private-vulnerability-reporting\" --silent && exit 0; sleep 5; done; exit 1"
+    environment = {
+      METHOD    = local.private_vulnerability_reporting ? "PUT" : "DELETE"
+      FULL_NAME = module.repo.full_names[var.repo_name]
+    }
+  }
 
   depends_on = [time_sleep.after_repo_create]
 }

@@ -33,6 +33,8 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+| ---- | ----------- |
+| <a name="output_full_names"></a> [full\_names](#output\_full\_names) | Repository key -> owner/name, for the API calls the provider has no resource for. |
 <!-- END OF PRE-COMMIT-OPENTOFU DOCS HOOK -->
 <!-- markdownlint-enable MD034 MD060 table-format -->

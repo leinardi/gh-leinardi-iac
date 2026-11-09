@@ -55,3 +55,21 @@ module "template_default_labels_wipe" {
   labels        = {} # <- empty set = "no labels should exist"
   authoritative = true
 }
+
+# Private vulnerability reporting, as modules/github-repo-stack sets it for every public repository
+# (see the comment there: the provider has no resource for it yet,
+# integrations/terraform-provider-github#2399 and #2969; replace this once that lands). The
+# template's SECURITY.md points to it, like every repository created from it.
+resource "terraform_data" "default_template_private_vulnerability_reporting" {
+  triggers_replace = {
+    repository = github_repository.default_template.name
+    enabled    = true
+  }
+
+  provisioner "local-exec" {
+    command = "for try in 1 2 3; do gh api --method PUT \"repos/$FULL_NAME/private-vulnerability-reporting\" --silent && exit 0; sleep 5; done; exit 1"
+    environment = {
+      FULL_NAME = github_repository.default_template.full_name
+    }
+  }
+}

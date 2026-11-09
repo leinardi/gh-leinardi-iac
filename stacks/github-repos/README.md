@@ -14,6 +14,7 @@
 | Name | Version |
 | ---- | ------- |
 | <a name="provider_github"></a> [github](#provider\_github) | 6.11.1 |
+| <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
 ## Modules
 
@@ -54,6 +55,7 @@
 | Name | Type |
 | ---- | ---- |
 | [github_repository.default_template](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository) | resource |
+| [terraform_data.default_template_private_vulnerability_reporting](https://registry.terraform.io/providers/hashicorp/terraform/latest/docs/resources/data) | resource |
 
 ## Inputs
 
