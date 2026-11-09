@@ -355,6 +355,16 @@ variable "vulnerability_alerts" {
   default = true
 }
 
+variable "private_vulnerability_reporting" {
+  type        = bool
+  default     = null
+  description = <<EOT
+Whether people can report a security vulnerability privately (Security -> Advisories -> Report a
+vulnerability), the channel SECURITY.md points to. null turns it on for a public repository and
+leaves a private one unmanaged (GitHub offers it on public repositories only).
+EOT
+}
+
 # Rulesets knobs
 variable "enable_rulesets_on_private" {
   type        = bool

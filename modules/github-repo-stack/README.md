@@ -15,6 +15,7 @@
 | Name | Version |
 | ---- | ------- |
 | <a name="provider_github"></a> [github](#provider\_github) | 6.11.1 |
+| <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 | <a name="provider_time"></a> [time](#provider\_time) | 0.14.2 |
 
 ## Modules
@@ -32,6 +33,7 @@
 | Name | Type |
 | ---- | ---- |
 | [github_workflow_repository_permissions.this](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/workflow_repository_permissions) | resource |
+| [terraform_data.private_vulnerability_reporting](https://registry.terraform.io/providers/hashicorp/terraform/latest/docs/resources/data) | resource |
 | [time_sleep.after_repo_create](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 
 ## Inputs
@@ -62,6 +64,7 @@
 | <a name="input_label_overrides"></a> [label\_overrides](#input\_label\_overrides) | Per-repo label overrides/additions | <pre>map(object({<br/>    color       = string<br/>    description = optional(string)<br/>  }))</pre> | `{}` | no |
 | <a name="input_labels_authoritative"></a> [labels\_authoritative](#input\_labels\_authoritative) | n/a | `bool` | `true` | no |
 | <a name="input_license_template"></a> [license\_template](#input\_license\_template) | n/a | `string` | `"mit"` | no |
+| <a name="input_private_vulnerability_reporting"></a> [private\_vulnerability\_reporting](#input\_private\_vulnerability\_reporting) | Whether people can report a security vulnerability privately (Security -> Advisories -> Report a<br/>vulnerability), the channel SECURITY.md points to. null turns it on for a public repository and<br/>leaves a private one unmanaged (GitHub offers it on public repositories only). | `bool` | `null` | no |
 | <a name="input_repo_name"></a> [repo\_name](#input\_repo\_name) | Repository name | `string` | n/a | yes |
 | <a name="input_template"></a> [template](#input\_template) | Optional template used only at creation time. If null, repo is created without template (or imported). | <pre>object({<br/>    owner                = string<br/>    repository           = string<br/>    include_all_branches = optional(bool)<br/>  })</pre> | `null` | no |
 | <a name="input_topics"></a> [topics](#input\_topics) | Extra topics. 'gh-leinardi-iac' is always added. | `list(string)` | `[]` | no |
