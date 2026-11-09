@@ -80,13 +80,6 @@ module "repo_bitgauge" {
     release = { deployment_branches = ["main"] }
   }
 
-  # The dhi.io pull-only account, read as vars.DHI_USERNAME by CI's trusted image jobs and the
-  # release job. Not a secret; the DHI_TOKEN secrets (Actions, release environment, Dependabot)
-  # are set by hand (bitgauge docs/release.md, One-Time Setup).
-  actions_variables = {
-    DHI_USERNAME = "leinardi"
-  }
-
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
