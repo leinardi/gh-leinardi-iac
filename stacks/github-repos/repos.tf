@@ -55,6 +55,18 @@ module "repo_awtrix_controller" {
 
   repo_name = "awtrix-controller"
 
+  # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
+  # succeeded, so it is the only check to require. CI runs on every pull request and push to the
+  # default branch with no path filter, so it always reports.
+  default_branch_required_checks = ["ci-result"]
+
+  # release.yaml's publishing jobs run in this environment. The release is dispatched by hand with
+  # no reviewers, so its one rule is that only main may deploy to it: the workflow's guard job is
+  # the first line, this the one a changed workflow on another branch cannot remove.
+  environments = {
+    release = { deployment_branches = ["main"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -144,6 +156,15 @@ module "repo_gh_reusable_workflows" {
   description = "Reusable GitHub Actions workflows for my projects."
   topics      = ["github-actions", "reusable-workflows", "ci"]
 
+  # ci-result (.github/workflows/local-ci.yaml) needs every other local-ci.yaml job and fails unless each
+  # succeeded, so it is the only check to require. CI runs on every pull request and push to the
+  # default branch with no path filter, so it always reports.
+  default_branch_required_checks = ["ci-result"]
+
+  # No workflow here creates or approves a pull request; managing the setting also keeps the
+  # GITHUB_TOKEN default permission at read (it was write).
+  actions_can_create_pull_requests = false
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -172,6 +193,11 @@ module "repo_gha_pre_commit_reviewdog_actions" {
     "tofu-trivy",
     "yamllint",
   ]
+
+  # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
+  # succeeded, so it is the only check to require. CI runs on every pull request and push to the
+  # default branch with no path filter, so it always reports.
+  default_branch_required_checks = ["ci-result"]
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
@@ -285,6 +311,13 @@ module "repo_herdquay" {
 
   default_branch_required_checks = ["ci-result"]
 
+  # release.yaml's publishing jobs run in this environment. The release is dispatched by hand with
+  # no reviewers, so its one rule is that only main may deploy to it: the workflow's guard job is
+  # the first line, this the one a changed workflow on another branch cannot remove.
+  environments = {
+    release = { deployment_branches = ["main"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -360,6 +393,11 @@ module "repo_make_common" {
   topics      = ["makefile", "automation", "tooling"]
   template    = local.default_template
 
+  # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
+  # succeeded, so it is the only check to require. CI runs on every pull request and push to the
+  # default branch with no path filter, so it always reports.
+  default_branch_required_checks = ["ci-result"]
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -391,6 +429,18 @@ module "repo_monmux" {
 
   actions_variables = {
     CLOUDSMITH_SERVICE_SLUG = "github-actions-release-0awa"
+  }
+
+  # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
+  # succeeded, so it is the only check to require. CI runs on every pull request and push to the
+  # default branch with no path filter, so it always reports.
+  default_branch_required_checks = ["ci-result"]
+
+  # release.yaml's publishing jobs run in this environment. The release is dispatched by hand with
+  # no reviewers, so its one rule is that only main may deploy to it: the workflow's guard job is
+  # the first line, this the one a changed workflow on another branch cannot remove.
+  environments = {
+    release = { deployment_branches = ["main"] }
   }
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
@@ -442,6 +492,18 @@ module "repo_swarm_device_access" {
   description = "Linux daemon that enables GPU, USB, and other /dev device passthrough for Docker Swarm services by injecting cgroup device-allow rules for bind-mounted devices."
   topics      = ["docker-swarm", "device-passthrough", "cgroups", "ebpf"]
 
+  # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
+  # succeeded, so it is the only check to require. CI runs on every pull request and push to the
+  # default branch with no path filter, so it always reports.
+  default_branch_required_checks = ["ci-result"]
+
+  # release.yaml's publishing jobs run in this environment. The release is dispatched by hand with
+  # no reviewers, so its one rule is that only master may deploy to it: the workflow's guard job is
+  # the first line, this the one a changed workflow on another branch cannot remove.
+  environments = {
+    release = { deployment_branches = ["master"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -473,6 +535,23 @@ module "repo_swarm_scheduler_exporter" {
   repo_name   = "swarm-scheduler-exporter"
   description = "Prometheus exporter for Docker Swarm focused on task state visibility, accurate desired replicas, and operability at scale."
   topics      = ["prometheus", "docker-swarm", "exporter", "monitoring"]
+
+  # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
+  # succeeded; integration (.github/workflows/integration.yaml) runs the Swarm suite, which the
+  # release also gates on. Both workflows run on every pull request and push to master with no path
+  # filter, so both always report.
+  default_branch_required_checks = ["ci-result", "integration"]
+
+  # release.yaml's publishing jobs run in this environment. The release is dispatched by hand with
+  # no reviewers, so its one rule is that only master may deploy to it: the workflow's guard job is
+  # the first line, this the one a changed workflow on another branch cannot remove.
+  environments = {
+    release = { deployment_branches = ["master"] }
+  }
+
+  # No workflow here creates or approves a pull request; managing the setting also keeps the
+  # GITHUB_TOKEN default permission at read (it was write).
+  actions_can_create_pull_requests = false
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
