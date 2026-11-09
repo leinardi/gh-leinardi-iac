@@ -43,6 +43,7 @@ symlink to the root one, so the targets also work from the stack directory.
 | `stacks/github-repos/repos-templates.tf` | the template repositories, used only when a repository is created |
 | `stacks/github-repos/defaults.tf` | `local.repo_defaults`, the settings every repository starts from |
 | `stacks/github-repos/moved.tf` | `moved` blocks for renames still to be applied |
+| `stacks/github-repos/imports.tf` | `import` blocks for resources created by hand, still to be applied |
 | `stacks/github-repos/.trivyignore` | accepted Trivy findings for the stack, each with a reason |
 | `modules/github-repo-stack/` | wrapper module: defaults plus the five modules below |
 | `modules/github-{repositories,labels,actions-variables,environments,rulesets}/` | generic modules, one resource family each |

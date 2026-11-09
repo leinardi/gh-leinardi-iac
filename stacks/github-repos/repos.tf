@@ -161,10 +161,6 @@ module "repo_gh_reusable_workflows" {
   # default branch with no path filter, so it always reports.
   default_branch_required_checks = ["ci-result"]
 
-  # No workflow here creates or approves a pull request; managing the setting also keeps the
-  # GITHUB_TOKEN default permission at read (it was write).
-  actions_can_create_pull_requests = false
-
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -548,10 +544,6 @@ module "repo_swarm_scheduler_exporter" {
   environments = {
     release = { deployment_branches = ["master"] }
   }
-
-  # No workflow here creates or approves a pull request; managing the setting also keeps the
-  # GITHUB_TOKEN default permission at read (it was write).
-  actions_can_create_pull_requests = false
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
