@@ -30,6 +30,7 @@ At the moment, this repository manages:
 - Deployment environments (branch and tag policies, reviewers, wait timer)
 - Repository rulesets
   - default branch protection
+  - the same protection on extra branches (a trunk that is not yet the default branch)
   - immutable tags
 
 The scope may grow over time as more GitHub features are managed declaratively.

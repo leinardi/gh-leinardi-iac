@@ -294,6 +294,26 @@ module "repo_gx52" {
   auto_init        = false
   license_template = null
 
+  # Until the rewrite lands (M9) the default branch is the legacy master, whose ci.yaml is a
+  # dispatch-only stub: a required check there would never report on a pull request, so master
+  # requires none. The trunk is rust-rewrite, protected like a default branch. ci-result always
+  # reports on it: ci.yaml runs on every pull request and on workflow_dispatch, and its ci-result
+  # job is `if: always()`, so the release bump pull request (opened with GITHUB_TOKEN, CI
+  # dispatched on its branch) gets it too. At M9 the trunk becomes main, the default branch: the
+  # check moves to default_branch_required_checks and this entry goes.
+  extra_protected_branches = {
+    "rust-rewrite" = { required_checks = ["ci-result"] }
+  }
+
+  # release.yaml's version-bump-pr opens the bump pull request with GITHUB_TOKEN.
+  actions_can_create_pull_requests = true
+
+  # flathub-pr.yaml's push job holds the Flathub token (the FLATHUB_TOKEN environment secret, set
+  # by hand); only the trunk may deploy to it.
+  environments = {
+    release = { deployment_branches = ["rust-rewrite"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 

@@ -46,6 +46,26 @@ variable "default_branch_required_checks" {
   default = []
 }
 
+variable "extra_protected_branches" {
+  type = map(object({
+    required_checks = optional(list(string), [])
+  }))
+  default     = {}
+  description = <<EOT
+Branches other than the default branch that get the same protection (pull request with review, no
+deletion or force-push), keyed by branch name, each with its own required checks. For a trunk that
+is not yet the default branch; the default branch's ruleset is unchanged.
+EOT
+
+  validation {
+    condition = alltrue([
+      for name in keys(var.extra_protected_branches) :
+      can(regex("^[A-Za-z0-9._/-]+$", name)) && !strcontains(name, "..")
+    ])
+    error_message = "extra_protected_branches keys must be plain branch names (no patterns, no refs/heads/ prefix)."
+  }
+}
+
 variable "bypass_actors" {
   type = list(object({
     actor_id    = number
