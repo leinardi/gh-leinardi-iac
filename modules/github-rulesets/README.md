@@ -24,6 +24,7 @@ No modules.
 | Name | Type |
 | ---- | ---- |
 | [github_repository_ruleset.default_branch_protection](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_ruleset) | resource |
+| [github_repository_ruleset.extra_branch_protection](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_ruleset) | resource |
 | [github_repository_ruleset.immutable_tags](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_ruleset) | resource |
 
 ## Inputs
@@ -34,6 +35,7 @@ No modules.
 | <a name="input_default_branch_required_checks"></a> [default\_branch\_required\_checks](#input\_default\_branch\_required\_checks) | n/a | `list(string)` | `[]` | no |
 | <a name="input_default_branch_ruleset_enabled"></a> [default\_branch\_ruleset\_enabled](#input\_default\_branch\_ruleset\_enabled) | n/a | `bool` | `true` | no |
 | <a name="input_enabled"></a> [enabled](#input\_enabled) | If false, no rulesets are created. | `bool` | `true` | no |
+| <a name="input_extra_protected_branches"></a> [extra\_protected\_branches](#input\_extra\_protected\_branches) | Branches other than the default branch that get the same protection (pull request with review, no<br/>deletion or force-push), keyed by branch name, each with its own required checks. For a trunk that<br/>is not yet the default branch; the default branch's ruleset is unchanged. | <pre>map(object({<br/>    required_checks = optional(list(string), [])<br/>  }))</pre> | `{}` | no |
 | <a name="input_immutable_tags_ruleset_enabled"></a> [immutable\_tags\_ruleset\_enabled](#input\_immutable\_tags\_ruleset\_enabled) | n/a | `bool` | `true` | no |
 | <a name="input_repository"></a> [repository](#input\_repository) | Repository name | `string` | n/a | yes |
 

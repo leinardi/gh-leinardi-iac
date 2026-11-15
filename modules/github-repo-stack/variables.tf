@@ -387,6 +387,14 @@ variable "default_branch_required_checks" {
   default = []
 }
 
+variable "extra_protected_branches" {
+  type = map(object({
+    required_checks = optional(list(string), [])
+  }))
+  default     = {}
+  description = "Branches besides the default branch protected like it, each with its own required checks (see the github-rulesets module)."
+}
+
 variable "default_branch_bypass_actors" {
   type = list(object({
     actor_id    = number

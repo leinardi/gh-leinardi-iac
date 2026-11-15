@@ -114,6 +114,7 @@ module "rulesets" {
   default_branch_ruleset_enabled = var.default_branch_ruleset_enabled
   immutable_tags_ruleset_enabled = var.immutable_tags_ruleset_enabled
   default_branch_required_checks = var.default_branch_required_checks
+  extra_protected_branches       = var.extra_protected_branches
   bypass_actors                  = var.default_branch_bypass_actors
 
   depends_on = [time_sleep.after_repo_create]

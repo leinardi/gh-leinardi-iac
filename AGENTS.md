@@ -63,7 +63,8 @@ symlink to the root one, so the targets also work from the stack directory.
   `modules/github-repo-stack/variables.tf`) is deleted from every repository that uses the defaults,
   with its assignments, and so is a label someone created by hand. Per-repository additions or
   changes go in `label_overrides`.
-- **Required checks must always report.** `default_branch_required_checks` names CI job names. A job
+- **Required checks must always report.** `default_branch_required_checks` and the
+  `required_checks` of `extra_protected_branches` name CI job names. A job
   gated on `github.event_name == 'pull_request'` never reports on a run fired by `workflow_dispatch`
   (for example a release bump pull request opened with `GITHUB_TOKEN`), so requiring it can leave
   such pull requests unmergeable: say in a comment why each required check always runs, as

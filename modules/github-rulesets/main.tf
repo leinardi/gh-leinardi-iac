@@ -77,6 +77,60 @@ resource "github_repository_ruleset" "default_branch_protection" {
   }
 }
 
+# The same rules as default_branch_protection, on a named branch: keep the two rules blocks equal.
+resource "github_repository_ruleset" "extra_branch_protection" {
+  for_each = var.enabled ? var.extra_protected_branches : {}
+
+  name        = "Protect ${each.key}"
+  repository  = var.repository
+  target      = "branch"
+  enforcement = "active"
+
+  dynamic "bypass_actors" {
+    for_each = var.bypass_actors
+    content {
+      actor_id    = bypass_actors.value.actor_id
+      actor_type  = bypass_actors.value.actor_type
+      bypass_mode = bypass_actors.value.bypass_mode
+    }
+  }
+
+  conditions {
+    ref_name {
+      include = ["refs/heads/${each.key}"]
+      exclude = []
+    }
+  }
+
+  rules {
+    deletion                = true
+    non_fast_forward        = true
+    required_linear_history = false
+
+    pull_request {
+      required_approving_review_count = 1
+      dismiss_stale_reviews_on_push   = true
+      require_code_owner_review       = true
+      require_last_push_approval      = true
+    }
+
+    dynamic "required_status_checks" {
+      for_each = length(each.value.required_checks) > 0 ? [1] : []
+      content {
+        dynamic "required_check" {
+          for_each = each.value.required_checks
+          content {
+            context = required_check.value
+          }
+        }
+
+        strict_required_status_checks_policy = true
+        do_not_enforce_on_create             = true
+      }
+    }
+  }
+}
+
 resource "github_repository_ruleset" "immutable_tags" {
   count = (var.enabled && var.immutable_tags_ruleset_enabled) ? 1 : 0
 
