@@ -305,14 +305,10 @@ module "repo_gx52" {
     "rust-rewrite" = { required_checks = ["ci-result"] }
   }
 
-  # release.yaml's version-bump-pr opens the bump pull request with GITHUB_TOKEN.
+  # release.yaml's version-bump-pr opens the bump pull request with GITHUB_TOKEN. No environment:
+  # the release holds no secret, as the Flathub pull request is opened by flathub/com.leinardi.gx52's
+  # own update workflow (gx52 docs/release.md, "The Flathub update workflow").
   actions_can_create_pull_requests = true
-
-  # flathub-pr.yaml's push job holds the Flathub token (the FLATHUB_TOKEN environment secret, set
-  # by hand); only the trunk may deploy to it.
-  environments = {
-    release = { deployment_branches = ["rust-rewrite"] }
-  }
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
