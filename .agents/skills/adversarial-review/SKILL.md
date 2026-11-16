@@ -15,42 +15,21 @@ description: >
 You are a hostile reviewer. Assume the change is **wrong until proven right**. This configuration is
 applied to the live `leinardi` GitHub account: find the repository, label, ruleset or pull request
 that the next `tofu apply` would break. A review that finds nothing is only credible after you tried
-to break it and failed.
+to break it and failed. Read `AGENTS.md` first: its conventions are the review's floor. Then read
+`README.md`: it is the user-facing contract a change must keep true.
 
-Copy this checklist and tick items as you go:
+## Hard rule
 
-```text
-Review progress:
-- [ ] 1. Diff and intent established (default scope if none given)
-- [ ] 2. AGENTS.md and README.md read
-- [ ] 3. Repository invariants checked
-- [ ] 4. Adversarial passes run
-- [ ] 5. Findings confirmed or dropped; gates run
-- [ ] 6. Report written
-```
+Never run `make tofu-apply`, or `tofu apply`, `destroy`, `import` or `state` through
+`make tofu-command`, to verify a change: they change the live account.
 
-## 1. Establish the diff
+## Scope
 
-With no scope given, review the uncommitted work; if the tree is clean, review the branch against
-`main`.
-
-| User intent | Command |
-| --- | --- |
-| "my work" / uncommitted | `git status --short`, then `git diff HEAD`; read untracked files too, which no diff shows |
-| staged changes only | `git diff --staged` |
-| a branch / "this PR" | `git diff main...HEAD` |
-| a commit range | `git diff <base>..<head>` |
-| a GitHub PR number | `gh pr view <n>` for intent, then `gh pr diff <n>` |
-
-Read every changed file in full, not just the hunks, and the module or stack code that consumes it:
-a variable change is only safe if every module call agrees.
-
-## 2. Load project authority
-
-Read `AGENTS.md` first: its conventions are the review checklist's floor, and `README.md` is the
-user-facing contract a change must keep true.
-
-## 3. Repository invariants — check on every review
+When invoked directly: review the scope the user gives (`gh pr diff <n>` for a PR, `gh pr view <n>`
+for its intent); with none, the uncommitted work (`git diff HEAD` plus every untracked file, which
+no diff shows); on a clean tree, `git diff main...HEAD`. Read every changed file in full, not just
+the hunks, the stated intent, and the module or stack code that consumes it: a variable change is
+only safe if every module call agrees.
 
 ### What the plan destroys
 
@@ -116,54 +95,52 @@ user-facing contract a change must keep true.
 - No workflow may run `tofu plan` or `tofu apply`, or receive credentials for the state backend or a
   write-scoped GitHub token, without that being the stated intent of the change: CI has no write
   access to the account, and keeping it that way is a security property.
+- Reason through every trigger a changed workflow has: pull request, push, dispatch.
 
 ### Commits
 
-- Every commit is `type(scope): subject`, with the repository or module as the scope. There are no
-  releases: the type says what changes on GitHub once applied.
+Every commit is `type(scope): subject`, with the repository or module as the scope. There are no
+releases, so no tag or version derives from the types; the history is the changelog, and every
+commit lands on `main` as it is (merge commits). The type must say what changes on GitHub once the
+commit is applied (`AGENTS.md`): `feat` for a newly managed repository or setting, `fix` for a
+correction, `refactor` for a change whose plan is empty, `docs`, `chore` or `ci` when nothing
+applied changes. A commit whose plan changes the account, typed `chore`, `docs`, `ci` or
+`refactor`, hides a live change from the history: a finding. So is a `feat` or `fix` on a commit
+whose plan is empty (CI, docs, lint configuration, comments), and a `!` or `BREAKING CHANGE:`
+footer that the commit does not explain.
 
-## 4. Adversarial passes
+## Adversarial passes
 
-- **Correctness:** a default that changes every repository at once when the change meant one,
-  `count`/`for_each` that drops an instance.
+- **Defaults and iteration:** a default that changes every repository at once when the change
+  meant one, `count`/`for_each` that drops an instance.
 - **Empty and edge input:** a repository with no CI, a private repository, an archived one, a
   template repository, a value that is `null` versus omitted.
 - **Contract drift:** README, `AGENTS.md`, `SECURITY.md` and the module READMEs still describe what
   the configuration does.
-- **Commit type matches what applying it changes:** this repository has no releases, so no tag or
-  version derives from the types; the history is the changelog, and every commit lands on `main` as
-  it is (merge commits). The type must say what changes on GitHub once the commit is applied
-  (`AGENTS.md`): `feat` for a newly managed repository or setting, `fix` for a correction,
-  `refactor` for a change whose plan is empty, `docs`, `chore` or `ci` when nothing applied
-  changes. A commit whose plan changes the account, typed `chore`, `docs`, `ci` or `refactor`,
-  hides a live change from the history: a finding. So is a `feat` or `fix` on a commit whose plan is
-  empty (CI, docs, lint configuration, comments), and a `!` or `BREAKING CHANGE:` footer that the
-  commit does not explain.
 - **A check that can no longer fail:** `scripts/check-license-headers.sh`, the `ci-result` job and
   the `pre-commit-all` step that fails on a modified file guard claims nothing else checks. Break
   the guarded thing once (strip the header from a `.tf` file, let a needed job be skipped or
-  cancelled, make a hook rewrite a file) and see whether the check still fails. One that passes
+  cancelled, make a hook rewrite a file) and see whether the check still fails, and names the file
+  at fault. One that passes
   because its file list is empty, its `case` pattern no longer matches anything, a job it should
   judge is missing from `needs`, or a tool was never installed is a false pass: a finding.
 
-For each candidate finding, trace it to the plan or the code that proves it. If that confirms it,
-report it. If not, dig once more; if it is still unconfirmed, drop it. No named input and wrong
-result, no finding.
+## Gates
 
-## 5. Verify
+Do not re-run the repository's gates (`make check`, `make tofu-plan`). The implementer is expected
+to run them and CI runs them again, but do not assume either happened: report the verification
+evidence you actually have (under adversarial-review-loop, `verification.txt` when supplied, which
+is the implementer's claim and not proof; when invoked directly, the CI status or gate output in the
+PR or session) and what is missing, such as plan output for a diff that touches `stacks/` or
+`modules/`: without it every destroy, replace and label deletion is unverified, and a plan that
+could not be produced leaves those risks unverified. Never say that a check you did not see passed.
+Judge whether the change's tests prove it: a behaviour change needs a test that fails on the old
+code. When invoked directly, one focused command (one hook: `pre-commit run <hook-id> --files
+<file>`, for a hook that checks only the files it is given) may be run to confirm a single suspected
+finding, never a full suite or gate. A candidate that is neither reproduced nor traced end to end is
+dropped: no named input and wrong result, no finding.
 
-| Diff touched | Run |
-| --- | --- |
-| anything | `make check` (tofu fmt, validate, docs, tflint, trivy, ruff, mypy, actionlint, markdownlint, …) |
-| `stacks/` or `modules/` | `make tofu-plan` if credentials are available (`make login`, `gh auth login`), and read every destroy, replace and label deletion in it |
-| a workflow | `make check` (actionlint), then reason through each trigger it has: pull request, push, dispatch |
-| `scripts/check-license-headers.sh` | run it, then strip one governed file's header and confirm the check names that file |
-
-Never run `make tofu-apply`, or `tofu apply`, `destroy`, `import` or `state` through
-`make tofu-command`, to verify a change: they change the live account. If no plan could be produced,
-say so and mark the destroy and replace risks unverified.
-
-## 6. Report
+## Report
 
 Rank worst first:
 
@@ -173,4 +150,5 @@ Rank worst first:
   Fix: <the specific change>
 ```
 
-End with a verdict: **block**, **approve with nits**, or **approve**, and the gates you ran.
+End with a verdict (**block**, **approve with nits** or **approve**) and one line:
+`Verification evidence: seen … / missing …`.
