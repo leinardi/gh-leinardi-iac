@@ -294,20 +294,15 @@ module "repo_gx52" {
   auto_init        = false
   license_template = null
 
-  # Until the rewrite lands (M9) the default branch is the legacy master, whose ci.yaml is a
-  # dispatch-only stub: a required check there would never report on a pull request, so master
-  # requires none. The trunk is rust-rewrite, protected like a default branch. ci-result always
-  # reports on it: ci.yaml runs on every pull request and on workflow_dispatch, and its ci-result
-  # job is `if: always()`, so the release bump pull request (opened with GITHUB_TOKEN, CI
-  # dispatched on its branch) gets it too. At M9 the trunk becomes main, the default branch: the
-  # check moves to default_branch_required_checks and this entry goes.
-  extra_protected_branches = {
-    "rust-rewrite" = { required_checks = ["ci-result"] }
-  }
+  # The trunk is main, the default branch (the rewrite's rust-rewrite, renamed at M9; the legacy
+  # master is gone). ci-result always reports on it: ci.yaml runs on every pull request and on
+  # workflow_dispatch, and its ci-result job is `if: always()`, so the release bump pull request
+  # (opened with GITHUB_TOKEN, CI dispatched on its branch) gets it too.
+  default_branch_required_checks = ["ci-result"]
 
   # release.yaml's version-bump-pr opens the bump pull request with GITHUB_TOKEN. No environment:
-  # the release holds no secret, as the Flathub pull request is opened by flathub/com.leinardi.gx52's
-  # own update workflow (gx52 docs/release.md, "The Flathub update workflow").
+  # the release holds no secret, as the Flathub pull request is opened with the maintainer's own gh
+  # login (gx52 docs/release.md, "The Flathub pull requests").
   actions_can_create_pull_requests = true
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
