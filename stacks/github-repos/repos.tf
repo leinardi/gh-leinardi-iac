@@ -289,6 +289,13 @@ module "repo_gx52" {
   description = "Control the LEDs and MFD of the Logitech (Saitek) X52 and X52 Pro H.O.T.A.S. on Linux."
   topics      = ["x52", "x52-pro", "hotas", "joystick", "saitek", "logitech", "flight-simulator", "linux", "gtk", "flatpak", "flathub"]
 
+  homepage_url = "https://leinardi.github.io/gx52/"
+
+  # The docs site: .github/workflows/docs.yaml builds it with Zensical and deploys it with
+  # actions/deploy-pages, so Pages publishes from GitHub Actions. The URL matches site_url in
+  # zensical.toml.
+  pages = {}
+
   # Imported: the repository already exists, was formerly a mirror of gitlab.com/leinardi/gx52, and
   # is licensed GPL-3.0-or-later.
   auto_init        = false
@@ -468,6 +475,13 @@ module "repo_repo_docs_toolkit" {
   repo_name   = "repo-docs-toolkit"
   description = "Agent skills for repository documentation that stays true to the code: write, audit and restructure docs, publish them as a Zensical site, and write lean READMEs."
   topics      = ["documentation", "docs", "readme", "zensical", "mkdocs", "github-pages", "claude-code", "claude-code-plugin", "agent-skills"]
+
+  homepage_url = "https://leinardi.github.io/repo-docs-toolkit/"
+
+  # The docs site: .github/workflows/docs.yaml builds it with Zensical and deploys it with
+  # actions/deploy-pages, so Pages publishes from GitHub Actions. The URL matches site_url in
+  # zensical.toml.
+  pages = {}
 
   # Created empty: the existing local tree (with its own LICENSE) is pushed as the first commit.
   auto_init        = false
