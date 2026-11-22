@@ -31,6 +31,12 @@ variable "description" {
   default = null
 }
 
+variable "homepage_url" {
+  type        = string
+  default     = null
+  description = "Website shown in the repository's About box. null leaves it unmanaged."
+}
+
 variable "topics" {
   type        = list(string)
   default     = []
@@ -52,6 +58,25 @@ variable "template" {
     include_all_branches = optional(bool)
   })
   default = null
+}
+
+variable "pages" {
+  type = object({
+    build_type = optional(string, "workflow")
+    cname      = optional(string)
+    source = optional(object({
+      branch = string
+      path   = optional(string)
+    }))
+  })
+  default     = null
+  description = <<EOT
+GitHub Pages site (Settings -> Pages). build_type "workflow" (the default)
+publishes what a GitHub Actions workflow deploys with actions/deploy-pages;
+"legacy" publishes the branch given in source. null leaves Pages unmanaged.
+
+    pages = {}
+EOT
 }
 
 variable "labels_authoritative" {

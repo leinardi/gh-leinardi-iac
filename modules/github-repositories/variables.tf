@@ -44,6 +44,18 @@ variable "repos" {
     visibility             = string
     vulnerability_alerts   = optional(bool)
 
+    # Optional GitHub Pages site. build_type "workflow" publishes what a GitHub Actions workflow
+    # deploys (actions/deploy-pages); "legacy" publishes a branch, given in source. If omitted,
+    # Pages is left unmanaged.
+    pages = optional(object({
+      build_type = optional(string, "workflow")
+      cname      = optional(string)
+      source = optional(object({
+        branch = string
+        path   = optional(string)
+      }))
+    }))
+
     # Optional template repo used to create this repository.
     # If omitted, the repo is created normally (no template).
     template = optional(object({
