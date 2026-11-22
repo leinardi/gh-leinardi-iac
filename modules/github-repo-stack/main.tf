@@ -27,10 +27,11 @@ locals {
 
   repo_map = {
     (var.repo_name) = {
-      name        = var.repo_name
-      description = var.description
-      topics      = local.effective_topics
-      visibility  = var.visibility
+      name         = var.repo_name
+      description  = var.description
+      homepage_url = var.homepage_url
+      topics       = local.effective_topics
+      visibility   = var.visibility
 
       allow_auto_merge    = var.allow_auto_merge
       allow_merge_commit  = var.allow_merge_commit
@@ -48,6 +49,7 @@ locals {
       license_template     = var.license_template
       vulnerability_alerts = var.vulnerability_alerts
 
+      pages    = var.pages
       template = var.template
     }
   }

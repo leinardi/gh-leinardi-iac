@@ -61,6 +61,25 @@ resource "github_repository" "this" {
     }
   }
 
+  # Optional GitHub Pages site
+  dynamic "pages" {
+    for_each = try(each.value.pages, null) == null ? [] : [each.value.pages]
+
+    content {
+      build_type = pages.value.build_type
+      cname      = pages.value.cname
+
+      dynamic "source" {
+        for_each = pages.value.source == null ? [] : [pages.value.source]
+
+        content {
+          branch = source.value.branch
+          path   = source.value.path
+        }
+      }
+    }
+  }
+
   lifecycle {
     ignore_changes = [template]
   }
