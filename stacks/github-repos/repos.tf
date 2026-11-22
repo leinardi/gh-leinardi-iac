@@ -462,6 +462,28 @@ module "repo_pointerparity" {
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
+module "repo_repo_docs_toolkit" {
+  source = "../../modules/github-repo-stack"
+
+  repo_name   = "repo-docs-toolkit"
+  description = "Agent skills for repository documentation that stays true to the code: write, audit and restructure docs, publish them as a Zensical site, and write lean READMEs."
+  topics      = ["documentation", "docs", "readme", "zensical", "mkdocs", "github-pages", "claude-code", "claude-code-plugin", "agent-skills"]
+
+  # Created empty: the existing local tree (with its own LICENSE) is pushed as the first commit.
+  auto_init        = false
+  license_template = null
+
+  # ci-result (.github/workflows/ci.yaml) runs on pull_request, push and workflow_dispatch with
+  # `if: always()`, so it reports on every run, including the dispatch release.yaml fires at its
+  # GITHUB_TOKEN-authored bump PR. The reviewdog jobs are pull_request-only and must not be required.
+  default_branch_required_checks = ["ci-result"]
+
+  # release.yaml opens its version-bump pull request with GITHUB_TOKEN.
+  actions_can_create_pull_requests = true
+
+  enable_rulesets_on_private = var.enable_rulesets_on_private
+}
+
 module "repo_rust_common" {
   source = "../../modules/github-repo-stack"
 
