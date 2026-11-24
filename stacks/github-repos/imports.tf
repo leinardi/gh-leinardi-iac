@@ -32,3 +32,21 @@ import {
   to = module.repo_herdquay.module.environments.github_repository_environment_deployment_policy.this["release/branch/main"]
   id = "herdquay:release:64197354"
 }
+
+
+# One-off import: swarm-scheduler-exporter's github-pages environment and its "master" branch policy
+# (id 68098910) were created by GitHub when Pages was enabled. Creating a policy whose name exists
+# breaks the state (see herdquay above), so both are imported. gx52's and repo-docs-toolkit's were
+# imported the same way.
+#
+# Delete these blocks once the import has been applied.
+
+import {
+  to = module.repo_swarm_scheduler_exporter.module.environments.github_repository_environment.this["github-pages"]
+  id = "swarm-scheduler-exporter:github-pages"
+}
+
+import {
+  to = module.repo_swarm_scheduler_exporter.module.environments.github_repository_environment_deployment_policy.this["github-pages/branch/master"]
+  id = "swarm-scheduler-exporter:github-pages:68098910"
+}

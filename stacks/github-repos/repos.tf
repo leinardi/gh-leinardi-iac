@@ -312,6 +312,12 @@ module "repo_gx52" {
   # login (gx52 docs/release.md, "The Flathub pull requests").
   actions_can_create_pull_requests = true
 
+  # docs.yaml's deploy job runs in github-pages, which GitHub created when Pages was enabled: only
+  # main may deploy to it (imported in imports.tf).
+  environments = {
+    "github-pages" = { deployment_branches = ["main"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -495,6 +501,12 @@ module "repo_repo_docs_toolkit" {
   # release.yaml opens its version-bump pull request with GITHUB_TOKEN.
   actions_can_create_pull_requests = true
 
+  # docs.yaml's deploy job runs in github-pages, which GitHub created when Pages was enabled: only
+  # main may deploy to it (imported in imports.tf).
+  environments = {
+    "github-pages" = { deployment_branches = ["main"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -579,6 +591,13 @@ module "repo_swarm_scheduler_exporter" {
   description = "Prometheus exporter for Docker Swarm focused on task state visibility, accurate desired replicas, and operability at scale."
   topics      = ["prometheus", "docker-swarm", "exporter", "monitoring"]
 
+  homepage_url = "https://leinardi.github.io/swarm-scheduler-exporter/"
+
+  # The docs site: .github/workflows/docs.yaml builds it with Zensical and deploys it with
+  # actions/deploy-pages, so Pages publishes from GitHub Actions. The URL matches site_url in
+  # zensical.toml.
+  pages = {}
+
   # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
   # succeeded; integration (.github/workflows/integration.yaml) runs the Swarm suite, which the
   # release also gates on. Both workflows run on every pull request and push to master with no path
@@ -587,9 +606,12 @@ module "repo_swarm_scheduler_exporter" {
 
   # release.yaml's publishing jobs run in this environment. The release is dispatched by hand with
   # no reviewers, so its one rule is that only master may deploy to it: the workflow's guard job is
-  # the first line, this the one a changed workflow on another branch cannot remove.
+  # the first line, this the one a changed workflow on another branch cannot remove. docs.yaml's
+  # deploy job runs in github-pages, which GitHub created when Pages was enabled: only master may
+  # deploy to it either (imported in imports.tf).
   environments = {
-    release = { deployment_branches = ["master"] }
+    release        = { deployment_branches = ["master"] }
+    "github-pages" = { deployment_branches = ["master"] }
   }
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
