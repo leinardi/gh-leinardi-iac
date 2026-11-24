@@ -595,8 +595,7 @@ module "repo_swarm_scheduler_exporter" {
 
   # The docs site: .github/workflows/docs.yaml builds it with Zensical and deploys it with
   # actions/deploy-pages, so Pages publishes from GitHub Actions. The URL matches site_url in
-  # zensical.toml. Enabling Pages makes GitHub create the github-pages environment with a master
-  # branch policy; it is imported and declared under environments once that exists.
+  # zensical.toml.
   pages = {}
 
   # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
@@ -607,9 +606,12 @@ module "repo_swarm_scheduler_exporter" {
 
   # release.yaml's publishing jobs run in this environment. The release is dispatched by hand with
   # no reviewers, so its one rule is that only master may deploy to it: the workflow's guard job is
-  # the first line, this the one a changed workflow on another branch cannot remove.
+  # the first line, this the one a changed workflow on another branch cannot remove. docs.yaml's
+  # deploy job runs in github-pages, which GitHub created when Pages was enabled: only master may
+  # deploy to it either (imported in imports.tf).
   environments = {
-    release = { deployment_branches = ["master"] }
+    release        = { deployment_branches = ["master"] }
+    "github-pages" = { deployment_branches = ["master"] }
   }
 
   enable_rulesets_on_private = var.enable_rulesets_on_private

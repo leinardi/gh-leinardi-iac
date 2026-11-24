@@ -34,29 +34,19 @@ import {
 }
 
 
-# One-off imports: the github-pages environments of gx52 and repo-docs-toolkit and their "main"
-# branch policies (ids 67771746 and 67771742) were created by GitHub when Pages was enabled, before
-# the environments were managed here. Creating a policy whose name exists breaks the state (see
-# herdquay above), so all four are imported.
+# One-off import: swarm-scheduler-exporter's github-pages environment and its "master" branch policy
+# (id 68098910) were created by GitHub when Pages was enabled. Creating a policy whose name exists
+# breaks the state (see herdquay above), so both are imported. gx52's and repo-docs-toolkit's were
+# imported the same way.
 #
 # Delete these blocks once the import has been applied.
 
 import {
-  to = module.repo_gx52.module.environments.github_repository_environment.this["github-pages"]
-  id = "gx52:github-pages"
+  to = module.repo_swarm_scheduler_exporter.module.environments.github_repository_environment.this["github-pages"]
+  id = "swarm-scheduler-exporter:github-pages"
 }
 
 import {
-  to = module.repo_gx52.module.environments.github_repository_environment_deployment_policy.this["github-pages/branch/main"]
-  id = "gx52:github-pages:67771746"
-}
-
-import {
-  to = module.repo_repo_docs_toolkit.module.environments.github_repository_environment.this["github-pages"]
-  id = "repo-docs-toolkit:github-pages"
-}
-
-import {
-  to = module.repo_repo_docs_toolkit.module.environments.github_repository_environment_deployment_policy.this["github-pages/branch/main"]
-  id = "repo-docs-toolkit:github-pages:67771742"
+  to = module.repo_swarm_scheduler_exporter.module.environments.github_repository_environment_deployment_policy.this["github-pages/branch/master"]
+  id = "swarm-scheduler-exporter:github-pages:68098910"
 }
