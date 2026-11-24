@@ -501,6 +501,12 @@ module "repo_repo_docs_toolkit" {
   # release.yaml opens its version-bump pull request with GITHUB_TOKEN.
   actions_can_create_pull_requests = true
 
+  # docs.yaml's deploy job runs in github-pages, which GitHub created when Pages was enabled: only
+  # main may deploy to it (imported in imports.tf).
+  environments = {
+    "github-pages" = { deployment_branches = ["main"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
