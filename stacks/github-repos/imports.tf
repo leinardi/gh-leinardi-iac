@@ -32,3 +32,20 @@ import {
   to = module.repo_herdquay.module.environments.github_repository_environment_deployment_policy.this["release/branch/main"]
   id = "herdquay:release:64197354"
 }
+
+
+# One-off import: gx52's github-pages environment and its "main" branch policy (id 67771746) were
+# created by GitHub when Pages was enabled, before the environment was managed here. Creating a
+# policy whose name exists breaks the state (see herdquay above), so both are imported.
+#
+# Delete these blocks once the import has been applied.
+
+import {
+  to = module.repo_gx52.module.environments.github_repository_environment.this["github-pages"]
+  id = "gx52:github-pages"
+}
+
+import {
+  to = module.repo_gx52.module.environments.github_repository_environment_deployment_policy.this["github-pages/branch/main"]
+  id = "gx52:github-pages:67771746"
+}

@@ -312,6 +312,12 @@ module "repo_gx52" {
   # login (gx52 docs/release.md, "The Flathub pull requests").
   actions_can_create_pull_requests = true
 
+  # docs.yaml's deploy job runs in github-pages, which GitHub created when Pages was enabled: only
+  # main may deploy to it (imported in imports.tf).
+  environments = {
+    "github-pages" = { deployment_branches = ["main"] }
+  }
+
   enable_rulesets_on_private = var.enable_rulesets_on_private
 }
 
@@ -578,6 +584,14 @@ module "repo_swarm_scheduler_exporter" {
   repo_name   = "swarm-scheduler-exporter"
   description = "Prometheus exporter for Docker Swarm focused on task state visibility, accurate desired replicas, and operability at scale."
   topics      = ["prometheus", "docker-swarm", "exporter", "monitoring"]
+
+  homepage_url = "https://leinardi.github.io/swarm-scheduler-exporter/"
+
+  # The docs site: .github/workflows/docs.yaml builds it with Zensical and deploys it with
+  # actions/deploy-pages, so Pages publishes from GitHub Actions. The URL matches site_url in
+  # zensical.toml. Enabling Pages makes GitHub create the github-pages environment with a master
+  # branch policy; it is imported and declared under environments once that exists.
+  pages = {}
 
   # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
   # succeeded; integration (.github/workflows/integration.yaml) runs the Swarm suite, which the
