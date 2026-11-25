@@ -313,7 +313,7 @@ module "repo_gx52" {
   actions_can_create_pull_requests = true
 
   # docs.yaml's deploy job runs in github-pages, which GitHub created when Pages was enabled: only
-  # main may deploy to it (imported in imports.tf).
+  # main may deploy to it (imported into the state).
   environments = {
     "github-pages" = { deployment_branches = ["main"] }
   }
@@ -502,7 +502,7 @@ module "repo_repo_docs_toolkit" {
   actions_can_create_pull_requests = true
 
   # docs.yaml's deploy job runs in github-pages, which GitHub created when Pages was enabled: only
-  # main may deploy to it (imported in imports.tf).
+  # main may deploy to it (imported into the state).
   environments = {
     "github-pages" = { deployment_branches = ["main"] }
   }
@@ -563,7 +563,7 @@ module "repo_swarm_device_access" {
   # no reviewers, so its one rule is that only master may deploy to it: the workflow's guard job is
   # the first line, this the one a changed workflow on another branch cannot remove. docs.yaml's
   # deploy job runs in github-pages, which GitHub created when Pages was enabled: only master may
-  # deploy to it either (imported in imports.tf).
+  # deploy to it either (imported into the state).
   environments = {
     release        = { deployment_branches = ["master"] }
     "github-pages" = { deployment_branches = ["master"] }
@@ -618,7 +618,7 @@ module "repo_swarm_scheduler_exporter" {
   # no reviewers, so its one rule is that only master may deploy to it: the workflow's guard job is
   # the first line, this the one a changed workflow on another branch cannot remove. docs.yaml's
   # deploy job runs in github-pages, which GitHub created when Pages was enabled: only master may
-  # deploy to it either (imported in imports.tf).
+  # deploy to it either (imported into the state).
   environments = {
     release        = { deployment_branches = ["master"] }
     "github-pages" = { deployment_branches = ["master"] }
