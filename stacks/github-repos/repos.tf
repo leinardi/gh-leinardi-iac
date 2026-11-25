@@ -313,7 +313,7 @@ module "repo_gx52" {
   actions_can_create_pull_requests = true
 
   # docs.yaml's deploy job runs in github-pages, which GitHub created when Pages was enabled: only
-  # main may deploy to it (imported in imports.tf).
+  # main may deploy to it (imported into the state).
   environments = {
     "github-pages" = { deployment_branches = ["main"] }
   }
@@ -502,7 +502,7 @@ module "repo_repo_docs_toolkit" {
   actions_can_create_pull_requests = true
 
   # docs.yaml's deploy job runs in github-pages, which GitHub created when Pages was enabled: only
-  # main may deploy to it (imported in imports.tf).
+  # main may deploy to it (imported into the state).
   environments = {
     "github-pages" = { deployment_branches = ["main"] }
   }
@@ -547,6 +547,13 @@ module "repo_swarm_device_access" {
   description = "Linux daemon that enables GPU, USB, and other /dev device passthrough for Docker Swarm services by injecting cgroup device-allow rules for bind-mounted devices."
   topics      = ["docker-swarm", "device-passthrough", "cgroups", "ebpf"]
 
+  homepage_url = "https://leinardi.github.io/swarm-device-access/"
+
+  # The docs site: .github/workflows/docs.yaml builds it with Zensical and deploys it with
+  # actions/deploy-pages, so Pages publishes from GitHub Actions. The URL matches site_url in
+  # zensical.toml.
+  pages = {}
+
   # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
   # succeeded, so it is the only check to require. CI runs on every pull request and push to the
   # default branch with no path filter, so it always reports.
@@ -554,9 +561,12 @@ module "repo_swarm_device_access" {
 
   # release.yaml's publishing jobs run in this environment. The release is dispatched by hand with
   # no reviewers, so its one rule is that only master may deploy to it: the workflow's guard job is
-  # the first line, this the one a changed workflow on another branch cannot remove.
+  # the first line, this the one a changed workflow on another branch cannot remove. docs.yaml's
+  # deploy job runs in github-pages, which GitHub created when Pages was enabled: only master may
+  # deploy to it either (imported into the state).
   environments = {
-    release = { deployment_branches = ["master"] }
+    release        = { deployment_branches = ["master"] }
+    "github-pages" = { deployment_branches = ["master"] }
   }
 
   enable_rulesets_on_private = var.enable_rulesets_on_private
@@ -608,7 +618,7 @@ module "repo_swarm_scheduler_exporter" {
   # no reviewers, so its one rule is that only master may deploy to it: the workflow's guard job is
   # the first line, this the one a changed workflow on another branch cannot remove. docs.yaml's
   # deploy job runs in github-pages, which GitHub created when Pages was enabled: only master may
-  # deploy to it either (imported in imports.tf).
+  # deploy to it either (imported into the state).
   environments = {
     release        = { deployment_branches = ["master"] }
     "github-pages" = { deployment_branches = ["master"] }

@@ -20,33 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# One-off import: herdquay's release environment already had a "main" branch policy (id 64197354),
-# created by hand before the environment was managed here. Creating a policy whose name exists
-# returns no id, so the apply recorded "herdquay:release:0", every refresh got a 404 for it and
-# dropped it, and every plan proposed the create again. An import is skipped while its address is
-# in the state, so the broken entry is removed first (tofu state rm, by hand).
+# import blocks for resources created outside OpenTofu (by hand, or by GitHub itself, such as the
+# github-pages environment Pages creates), one comment each saying why. Delete a block once its
+# import has been applied: an import is skipped while its address is in the state.
 #
-# Delete this block once the import has been applied.
-
-import {
-  to = module.repo_herdquay.module.environments.github_repository_environment_deployment_policy.this["release/branch/main"]
-  id = "herdquay:release:64197354"
-}
-
-
-# One-off import: swarm-scheduler-exporter's github-pages environment and its "master" branch policy
-# (id 68098910) were created by GitHub when Pages was enabled. Creating a policy whose name exists
-# breaks the state (see herdquay above), so both are imported. gx52's and repo-docs-toolkit's were
-# imported the same way.
-#
-# Delete these blocks once the import has been applied.
-
-import {
-  to = module.repo_swarm_scheduler_exporter.module.environments.github_repository_environment.this["github-pages"]
-  id = "swarm-scheduler-exporter:github-pages"
-}
-
-import {
-  to = module.repo_swarm_scheduler_exporter.module.environments.github_repository_environment_deployment_policy.this["github-pages/branch/master"]
-  id = "swarm-scheduler-exporter:github-pages:68098910"
-}
+# None pending.
