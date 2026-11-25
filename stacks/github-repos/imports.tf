@@ -50,3 +50,19 @@ import {
   to = module.repo_swarm_scheduler_exporter.module.environments.github_repository_environment_deployment_policy.this["github-pages/branch/master"]
   id = "swarm-scheduler-exporter:github-pages:68098910"
 }
+
+
+# One-off import: swarm-device-access's github-pages environment and its "master" branch policy
+# (id 68200384) were created by GitHub when Pages was enabled, as swarm-scheduler-exporter's above.
+#
+# Delete these blocks once the import has been applied.
+
+import {
+  to = module.repo_swarm_device_access.module.environments.github_repository_environment.this["github-pages"]
+  id = "swarm-device-access:github-pages"
+}
+
+import {
+  to = module.repo_swarm_device_access.module.environments.github_repository_environment_deployment_policy.this["github-pages/branch/master"]
+  id = "swarm-device-access:github-pages:68200384"
+}
