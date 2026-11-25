@@ -547,6 +547,14 @@ module "repo_swarm_device_access" {
   description = "Linux daemon that enables GPU, USB, and other /dev device passthrough for Docker Swarm services by injecting cgroup device-allow rules for bind-mounted devices."
   topics      = ["docker-swarm", "device-passthrough", "cgroups", "ebpf"]
 
+  homepage_url = "https://leinardi.github.io/swarm-device-access/"
+
+  # The docs site: .github/workflows/docs.yaml builds it with Zensical and deploys it with
+  # actions/deploy-pages, so Pages publishes from GitHub Actions. The URL matches site_url in
+  # zensical.toml. Enabling Pages makes GitHub create the github-pages environment with a master
+  # branch policy; it is imported and declared under environments once that exists.
+  pages = {}
+
   # ci-result (.github/workflows/ci.yaml) needs every other ci.yaml job and fails unless each
   # succeeded, so it is the only check to require. CI runs on every pull request and push to the
   # default branch with no path filter, so it always reports.
